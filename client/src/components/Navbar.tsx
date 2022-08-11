@@ -3,10 +3,9 @@ import { Link, useParams } from "react-router-dom";
 
 const Navbar = () => {
   const curPlanet = useParams().planet;
-  console.log(curPlanet);
 
   return (
-    <div className="fixed-top flex items-center justify-between gap-10 border-b border-b-white-op-50 px-9 py-7">
+    <div className=" flex items-center justify-between gap-10 border-b border-b-white-op-50 px-9 py-7 md:justify-evenly">
       {/* Logo */}
       <div className=" cursor-pointer  text-3xl text-white opacity-90 md:text-4xl lg:text-5xl">
         <Link to="/">PlanetFacts</Link>
