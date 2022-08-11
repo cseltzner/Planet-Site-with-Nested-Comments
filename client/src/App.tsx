@@ -9,7 +9,7 @@ function App() {
     <>
       {/* Background image */}
       <div
-        className="absolute inset-0 bg-cover bg-center bg-repeat"
+        className="min-w-screen min-h-screen"
         style={{ backgroundImage: "url(./img/Starry-night.svg)" }}
       >
         <Navbar />

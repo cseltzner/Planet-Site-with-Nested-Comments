@@ -5,7 +5,7 @@ import { store } from "./app/store";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "./index.css";
-import { HashRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import { Route, Routes } from "react-router";
 import PlanetPage from "./components/pages/PlanetPage";
 import RandomPlanet from "./components/pages/RandomPlanet";
@@ -15,7 +15,7 @@ const root = createRoot(container);
 
 root.render(
   <React.StrictMode>
-    <HashRouter>
+    <BrowserRouter>
       <Provider store={store}>
         <Routes>
           <Route path="/" element={<App />}>
@@ -24,7 +24,7 @@ root.render(
           </Route>
         </Routes>
       </Provider>
-    </HashRouter>
+    </BrowserRouter>
   </React.StrictMode>
 );
 
