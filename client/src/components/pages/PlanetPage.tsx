@@ -7,7 +7,6 @@ const PlanetPage = () => {
   const { planet } = useParams();
   const { name, summary, orbit, rotation, radius, mass, temp } =
     planetData[`${planet?.toLowerCase()}`];
-  console.log(planet);
   return (
     <>
       <div className="mx-auto flex flex-col items-center gap-4 pt-12 pl-12 pr-12 text-white md:flex-row md:gap-12 md:pl-4 md:pt-24 lg:max-w-7xl">

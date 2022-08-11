@@ -13,7 +13,8 @@ function App() {
         style={{ backgroundImage: "url(./img/Starry-night.svg)" }}
       >
         <Navbar />
-        {params && <RandomPlanet />}
+        {/* If no params (eg. https://url.com/), send to random planet */}
+        {Object.keys(params).length === 0 && <RandomPlanet />}
         <Outlet />
       </div>
     </>
