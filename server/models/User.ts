@@ -1,17 +1,19 @@
 import mongoose, { Document } from "mongoose";
 
 export interface UserInterface extends Document {
-  name: String;
+  username: String;
   email: String;
   password: String;
+  favPlanet: Number;
 }
 
 const UserSchema = new mongoose.Schema<UserInterface>(
   {
-    name: {
+    username: {
       type: String,
       required: true,
       minlength: 2,
+      unique: true,
     },
     email: {
       type: String,
@@ -24,11 +26,16 @@ const UserSchema = new mongoose.Schema<UserInterface>(
       required: true,
       minlength: 6,
     },
+    favPlanet: {
+      type: Number,
+      required: true,
+      min: 1,
+      max: 9,
+    },
   },
   {
     timestamps: true,
   }
 );
 
-const User = mongoose.model<UserInterface>("user", UserSchema);
-module.exports = User;
+export const User = mongoose.model<UserInterface>("user", UserSchema);
