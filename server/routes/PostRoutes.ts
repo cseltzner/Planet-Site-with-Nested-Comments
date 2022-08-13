@@ -10,13 +10,6 @@ import {
 import { authMiddleware } from "../middleware/auth";
 const router = Router();
 
-// @route GET api/posts/:planet
-// @desc Get all posts
-// @access Public
-router.get("/", async (req, res) => {
-  // @todo get all posts
-});
-
 // @route POST api/posts/:planetId (eg. Planet 1 = Mercury)
 // @desc Create a post
 // @access Private
