@@ -2,6 +2,7 @@ import express from "express";
 import { StatusCodes } from "http-status-codes";
 import { Comment } from "../models/Comment";
 import { Post } from "../models/Post";
+import { postPopulate } from "./postPopulate";
 
 // Add comment
 export const addComment = async (
@@ -30,14 +31,9 @@ export const addComment = async (
     post.comments?.unshift(savedComment.id);
     await post.save();
 
-    const postWithComments = await Post.findOne({ _id: postId }).populate({
-      path: "comments",
-      model: "comment",
-      populate: {
-        path: "childComments",
-        model: "childcomment",
-      },
-    });
+    const postWithComments = await Post.findOne({ _id: postId }).populate(
+      postPopulate
+    );
 
     return res.json(postWithComments);
   } catch (err) {
@@ -84,14 +80,9 @@ export const editComment = async (
     comment.body = updatedCommentBody;
     comment.save();
 
-    const postWithComments = await Post.findOne({ _id: postId }).populate({
-      path: "comments",
-      model: "comment",
-      populate: {
-        path: "childComments",
-        model: "childcomment",
-      },
-    });
+    const postWithComments = await Post.findOne({ _id: postId }).populate(
+      postPopulate
+    );
 
     return res.json(postWithComments);
   } catch (err) {

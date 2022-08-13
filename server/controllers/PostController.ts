@@ -1,6 +1,7 @@
 import express from "express";
 import { StatusCodes } from "http-status-codes";
 import { Post } from "../models/Post";
+import { postPopulate } from "./postPopulate";
 
 // Create a post
 export const createPost = async (
@@ -50,8 +51,43 @@ export const getAllPosts = async (
     res.status(StatusCodes.BAD_REQUEST).send("planetId must be a number");
   }
   try {
-    const posts = await Post.find({ planet: planetId }).sort({ date: -1 });
+    const posts = await Post.find({ planet: planetId })
+      .sort({ date: -1 })
+      .populate(postPopulate);
     return res.json(posts);
+  } catch (err) {
+    console.log(err);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Server Error");
+    return;
+  }
+};
+
+// Edit post
+export const editPost = async (req: express.Request, res: express.Response) => {
+  try {
+    const userId = req.userId?.id;
+    const postId = req.params.postId;
+    const body = req.body.body;
+
+    const post = await Post.findById(postId).populate(postPopulate);
+
+    // Check if the post exists
+    if (!post) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ msg: "Invalid post Id" });
+    }
+
+    // Check that user owns the post
+    if (post.user.toString() !== userId) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ msg: "You cannot edit someone else's post!" });
+    }
+
+    post.body = body;
+    const updatedPost = await post.save();
+    res.json(updatedPost);
   } catch (err) {
     console.log(err);
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Server Error");

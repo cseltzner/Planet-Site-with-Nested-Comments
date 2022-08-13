@@ -51,4 +51,23 @@ router.post("/:planetId", // planetId: Number(1 through 9)
 router.get("/:planetId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, postController_1.getAllPosts)(req, res);
 }));
+// @route PUT api/posts/:postId
+// @desc Edit post body
+// @access Private
+// @body body:String
+router.put("/:postId", [
+    auth_1.authMiddleware,
+    (0, express_validator_1.check)("body", "Post body must not be empty").not().isEmpty(),
+    (0, express_validator_1.check)("body", "Post body must be less than 5000 characters").isLength({
+        max: 5000,
+    }),
+], (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const errors = (0, express_validator_1.validationResult)(req);
+    if (!errors.isEmpty()) {
+        return res
+            .status(http_status_codes_1.StatusCodes.BAD_REQUEST)
+            .json({ errors: errors.array() });
+    }
+    yield (0, postController_1.editPost)(req, res);
+}));
 exports.default = router;

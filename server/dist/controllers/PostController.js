@@ -9,9 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllPosts = exports.createPost = void 0;
+exports.editPost = exports.getAllPosts = exports.createPost = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const Post_1 = require("../models/Post");
+const postPopulate_1 = require("./postPopulate");
 // Create a post
 const createPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
@@ -55,7 +56,9 @@ const getAllPosts = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).send("planetId must be a number");
     }
     try {
-        const posts = yield Post_1.Post.find({ planet: planetId }).sort({ date: -1 });
+        const posts = yield Post_1.Post.find({ planet: planetId })
+            .sort({ date: -1 })
+            .populate(postPopulate_1.postPopulate);
         return res.json(posts);
     }
     catch (err) {
@@ -65,3 +68,34 @@ const getAllPosts = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.getAllPosts = getAllPosts;
+// Edit post
+const editPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _b;
+    try {
+        const userId = (_b = req.userId) === null || _b === void 0 ? void 0 : _b.id;
+        const postId = req.params.postId;
+        const body = req.body.body;
+        const post = yield Post_1.Post.findById(postId).populate(postPopulate_1.postPopulate);
+        // Check if the post exists
+        if (!post) {
+            return res
+                .status(http_status_codes_1.StatusCodes.BAD_REQUEST)
+                .json({ msg: "Invalid post Id" });
+        }
+        // Check that user owns the post
+        if (post.user.toString() !== userId) {
+            return res
+                .status(http_status_codes_1.StatusCodes.BAD_REQUEST)
+                .json({ msg: "You cannot edit someone else's post!" });
+        }
+        post.body = body;
+        const updatedPost = yield post.save();
+        res.json(updatedPost);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).send("Server Error");
+        return;
+    }
+});
+exports.editPost = editPost;

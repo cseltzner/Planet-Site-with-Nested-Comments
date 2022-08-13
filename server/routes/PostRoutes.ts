@@ -1,7 +1,11 @@
 import express, { Router } from "express";
 import { check, validationResult } from "express-validator";
 import { StatusCodes } from "http-status-codes";
-import { createPost, getAllPosts } from "../controllers/postController";
+import {
+  createPost,
+  editPost,
+  getAllPosts,
+} from "../controllers/postController";
 import { authMiddleware } from "../middleware/auth";
 const router = Router();
 
@@ -47,6 +51,30 @@ router.get(
   "/:planetId",
   async (req: express.Request, res: express.Response) => {
     await getAllPosts(req, res);
+  }
+);
+
+// @route PUT api/posts/:postId
+// @desc Edit post body
+// @access Private
+// @body body:String
+router.put(
+  "/:postId",
+  [
+    authMiddleware,
+    check("body", "Post body must not be empty").not().isEmpty(),
+    check("body", "Post body must be less than 5000 characters").isLength({
+      max: 5000,
+    }),
+  ],
+  async (req: express.Request, res: express.Response) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ errors: errors.array() });
+    }
+    await editPost(req, res);
   }
 );
 

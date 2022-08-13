@@ -13,6 +13,7 @@ exports.editComment = exports.addComment = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const Comment_1 = require("../models/Comment");
 const Post_1 = require("../models/Post");
+const postPopulate_1 = require("./postPopulate");
 // Add comment
 const addComment = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
@@ -34,14 +35,7 @@ const addComment = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const savedComment = yield newComment.save();
         (_b = post.comments) === null || _b === void 0 ? void 0 : _b.unshift(savedComment.id);
         yield post.save();
-        const postWithComments = yield Post_1.Post.findOne({ _id: postId }).populate({
-            path: "comments",
-            model: "comment",
-            populate: {
-                path: "childComments",
-                model: "childcomment",
-            },
-        });
+        const postWithComments = yield Post_1.Post.findOne({ _id: postId }).populate(postPopulate_1.postPopulate);
         return res.json(postWithComments);
     }
     catch (err) {
@@ -81,14 +75,7 @@ const editComment = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         const updatedCommentBody = req.body.body;
         comment.body = updatedCommentBody;
         comment.save();
-        const postWithComments = yield Post_1.Post.findOne({ _id: postId }).populate({
-            path: "comments",
-            model: "comment",
-            populate: {
-                path: "childComments",
-                model: "childcomment",
-            },
-        });
+        const postWithComments = yield Post_1.Post.findOne({ _id: postId }).populate(postPopulate_1.postPopulate);
         return res.json(postWithComments);
     }
     catch (err) {
