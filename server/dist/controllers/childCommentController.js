@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.editReply = exports.addReply = void 0;
+exports.deleteReply = exports.editReply = exports.addReply = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const Post_1 = require("../models/Post");
 const ChildComment_1 = require("../models/ChildComment");
@@ -57,7 +57,6 @@ const addReply = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         return res.json(postWithComments);
     }
     catch (err) {
-        console.log(err);
         return res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR);
     }
 });
@@ -71,7 +70,6 @@ const editReply = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (postId.length !== 24) {
         return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({ msg: "Invalid Post Id" });
     }
-    console.log(replyId);
     if (replyId.length !== 24) {
         return res
             .status(http_status_codes_1.StatusCodes.BAD_REQUEST)
@@ -85,7 +83,6 @@ const editReply = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 .status(http_status_codes_1.StatusCodes.BAD_REQUEST)
                 .json({ msg: "Invalid post Id" });
         }
-        console.log("reply id: " + replyId);
         const reply = yield ChildComment_1.ChildComment.findById(replyId);
         // Check for existing reply
         if (!reply) {
@@ -94,8 +91,6 @@ const editReply = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 .json({ msg: "Invalid reply Id" });
         }
         // Check if reply's parent comment is in the post
-        console.log("post.comments: " + post.comments);
-        console.log("reply.parentComment: " + (reply === null || reply === void 0 ? void 0 : reply.parentComment));
         if (!((_d = post.comments) === null || _d === void 0 ? void 0 : _d.find((comment) => {
             return comment._id.toString() == (reply === null || reply === void 0 ? void 0 : reply.parentComment.toString());
         }))) {
@@ -122,3 +117,57 @@ const editReply = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.editReply = editReply;
+// Delete a reply
+const deleteReply = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _e, _f;
+    const userId = (_e = req.userId) === null || _e === void 0 ? void 0 : _e.id;
+    const replyId = req.params.replyId;
+    const postId = req.params.postId;
+    if (postId.length !== 24) {
+        return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({ msg: "Invalid Post Id" });
+    }
+    if (replyId.length !== 24) {
+        return res
+            .status(http_status_codes_1.StatusCodes.BAD_REQUEST)
+            .json({ msg: "Invalid Comment Id" });
+    }
+    try {
+        // Check for existing post
+        const post = yield Post_1.Post.findOne({ _id: postId });
+        if (!post) {
+            return res
+                .status(http_status_codes_1.StatusCodes.BAD_REQUEST)
+                .json({ msg: "Invalid post Id" });
+        }
+        const reply = yield ChildComment_1.ChildComment.findById(replyId);
+        // Check for existing reply
+        if (!reply) {
+            return res
+                .status(http_status_codes_1.StatusCodes.BAD_REQUEST)
+                .json({ msg: "Invalid reply Id" });
+        }
+        // Check if reply's parent comment is in the post
+        if (!((_f = post.comments) === null || _f === void 0 ? void 0 : _f.find((comment) => {
+            return comment._id.toString() == (reply === null || reply === void 0 ? void 0 : reply.parentComment.toString());
+        }))) {
+            return res
+                .status(http_status_codes_1.StatusCodes.BAD_REQUEST)
+                .json({ msg: "Reply does not exist on the post specified" });
+        }
+        // Check that user owns the comment
+        if (reply.user.toString() !== userId) {
+            return res
+                .status(http_status_codes_1.StatusCodes.BAD_REQUEST)
+                .json({ msg: "You cannot delete someone else's comment!" });
+        }
+        // Validation success
+        yield ChildComment_1.ChildComment.findByIdAndDelete(replyId);
+        const postWithComments = yield Post_1.Post.findOne({ _id: postId }).populate(postPopulate_1.postPopulate);
+        return res.json(postWithComments);
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+});
+exports.deleteReply = deleteReply;

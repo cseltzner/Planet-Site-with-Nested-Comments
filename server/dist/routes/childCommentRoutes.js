@@ -53,4 +53,10 @@ router.put("/reply/:postId/:replyId", [
     }
     yield (0, childCommentController_1.editReply)(req, res);
 }));
+// @route DELETE api/posts/comments/reply/:postId/:replyId
+// @desc Delete a reply to a comment
+// @access Private
+router.delete("/reply/:postId/:replyId", auth_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield (0, childCommentController_1.deleteReply)(req, res);
+}));
 exports.default = router;
