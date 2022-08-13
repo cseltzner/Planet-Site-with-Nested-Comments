@@ -6,7 +6,7 @@ import { authMiddleware } from "../middleware/auth";
 const router = Router();
 
 // @route POST api/posts/comments/:postId
-// @desc Create a comment and return the post
+// @desc Create a comment
 // @access Private
 // @body body:String
 router.post(

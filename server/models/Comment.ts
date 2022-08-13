@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { ChildCommentInterface } from "./ChildComment";
 import { UserInterface } from "./User";
 
@@ -10,7 +10,7 @@ export interface CommentInterface extends mongoose.Document {
 
 const CommentSchema = new mongoose.Schema({
   user: {
-    type: mongoose.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: "user",
     required: true,
   },
@@ -22,10 +22,8 @@ const CommentSchema = new mongoose.Schema({
   },
   childComments: [
     {
-      childComment: {
-        type: mongoose.Types.ObjectId,
-        ref: "childcomment",
-      },
+      type: Schema.Types.ObjectId,
+      ref: "childcomment",
     },
   ],
 });

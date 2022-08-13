@@ -21,6 +21,9 @@ const addComment = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     const userId = (_a = req.userId) === null || _a === void 0 ? void 0 : _a.id;
     const postId = req.params.postId;
     let post;
+    if (postId.length !== 24) {
+        return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({ msg: "Invalid Post Id" });
+    }
     try {
         post = yield Post_1.Post.findOne({ _id: postId });
         if (!post) {
@@ -50,6 +53,14 @@ const editComment = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     const userId = (_c = req.userId) === null || _c === void 0 ? void 0 : _c.id;
     const commentId = req.params.commentId;
     const postId = req.params.postId;
+    if (postId.length !== 24) {
+        return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({ msg: "Invalid Post Id" });
+    }
+    if (commentId.length !== 24) {
+        return res
+            .status(http_status_codes_1.StatusCodes.BAD_REQUEST)
+            .json({ msg: "Invalid Comment Id" });
+    }
     try {
         // Check for existing post
         const post = yield Post_1.Post.findOne({ _id: postId });
