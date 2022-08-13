@@ -15,11 +15,11 @@ const http_status_codes_1 = require("http-status-codes");
 const childCommentController_1 = require("../controllers/childCommentController");
 const auth_1 = require("../middleware/auth");
 const router = (0, express_1.Router)();
-// @route POST api/posts/comments/:postId/:commentId
+// @route POST api/posts/comments/reply/:postId/:commentId
 // @desc Create a reply to a comment
 // @access Private
 // @body body:String
-router.post("/:postId/:commentId", [
+router.post("/reply/:postId/:commentId", [
     auth_1.authMiddleware,
     (0, express_validator_1.check)("body", "Comment body must not be empty").not().isEmpty(),
     (0, express_validator_1.check)("body", "Comments must be less than 3000 characters long").isLength({
@@ -33,5 +33,24 @@ router.post("/:postId/:commentId", [
             .json({ errors: errors.array() });
     }
     yield (0, childCommentController_1.addReply)(req, res);
+}));
+// @route PUT api/posts/comments/reply/:postId/:replyId
+// @desc Edit a reply to a comment
+// @access Private
+// @body body:String
+router.put("/reply/:postId/:replyId", [
+    auth_1.authMiddleware,
+    (0, express_validator_1.check)("body", "Comment body must not be empty").not().isEmpty(),
+    (0, express_validator_1.check)("body", "Comments must be less than 3000 characters long").isLength({
+        max: 3000,
+    }),
+], (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const errors = (0, express_validator_1.validationResult)(req);
+    if (!errors.isEmpty()) {
+        return res
+            .status(http_status_codes_1.StatusCodes.BAD_REQUEST)
+            .json({ errors: errors.array() });
+    }
+    yield (0, childCommentController_1.editReply)(req, res);
 }));
 exports.default = router;

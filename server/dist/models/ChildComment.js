@@ -31,6 +31,11 @@ const ChildCommentSchema = new mongoose_1.default.Schema({
         ref: "user",
         required: true,
     },
+    parentComment: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: "comment",
+        required: true,
+    },
     body: {
         type: String,
         required: true,

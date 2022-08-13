@@ -31,6 +31,11 @@ const CommentSchema = new mongoose_1.default.Schema({
         ref: "user",
         required: true,
     },
+    parentPost: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: "post",
+        required: true,
+    },
     body: {
         type: String,
         required: true,

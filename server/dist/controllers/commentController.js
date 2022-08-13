@@ -33,6 +33,7 @@ const addComment = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         }
         const newComment = new Comment_1.Comment({
             user: userId,
+            parentPost: postId,
             body: body,
         });
         const savedComment = yield newComment.save();

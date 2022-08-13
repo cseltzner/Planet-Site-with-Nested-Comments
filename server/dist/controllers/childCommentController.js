@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addReply = void 0;
+exports.editReply = exports.addReply = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const Post_1 = require("../models/Post");
 const ChildComment_1 = require("../models/ChildComment");
@@ -31,6 +31,14 @@ const addReply = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             .json({ msg: "Invalid Comment Id" });
     }
     try {
+        // Check for existing post
+        const post = yield Post_1.Post.findOne({ _id: postId });
+        if (!post) {
+            return res
+                .status(http_status_codes_1.StatusCodes.BAD_REQUEST)
+                .json({ msg: "Invalid post Id" });
+        }
+        // Check for existing parent comment
         const parentComment = yield Comment_1.Comment.findById(commentId);
         if (!parentComment) {
             return res
@@ -39,17 +47,12 @@ const addReply = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         const newReply = new ChildComment_1.ChildComment({
             user: userId,
+            parentComment: commentId,
             body: body,
         });
         const savedReply = yield newReply.save();
-        console.log("SAVED REPLY");
-        console.log("Here is the saved reply: " + savedReply);
-        console.log("parent comment before: " + parentComment);
         (_b = parentComment.childComments) === null || _b === void 0 ? void 0 : _b.unshift(savedReply._id);
-        console.log("UNSHIFTED");
-        console.log("parent comment after: " + parentComment);
         yield parentComment.save();
-        console.log("SAVED PARENT COMMENT");
         const postWithComments = yield Post_1.Post.findOne({ _id: postId }).populate(postPopulate_1.postPopulate);
         return res.json(postWithComments);
     }
@@ -59,3 +62,63 @@ const addReply = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.addReply = addReply;
+// Edit a reply
+const editReply = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _c, _d;
+    const userId = (_c = req.userId) === null || _c === void 0 ? void 0 : _c.id;
+    const replyId = req.params.replyId;
+    const postId = req.params.postId;
+    if (postId.length !== 24) {
+        return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({ msg: "Invalid Post Id" });
+    }
+    console.log(replyId);
+    if (replyId.length !== 24) {
+        return res
+            .status(http_status_codes_1.StatusCodes.BAD_REQUEST)
+            .json({ msg: "Invalid Comment Id" });
+    }
+    try {
+        // Check for existing post
+        const post = yield Post_1.Post.findOne({ _id: postId });
+        if (!post) {
+            return res
+                .status(http_status_codes_1.StatusCodes.BAD_REQUEST)
+                .json({ msg: "Invalid post Id" });
+        }
+        console.log("reply id: " + replyId);
+        const reply = yield ChildComment_1.ChildComment.findById(replyId);
+        // Check for existing reply
+        if (!reply) {
+            return res
+                .status(http_status_codes_1.StatusCodes.BAD_REQUEST)
+                .json({ msg: "Invalid reply Id" });
+        }
+        // Check if reply's parent comment is in the post
+        console.log("post.comments: " + post.comments);
+        console.log("reply.parentComment: " + (reply === null || reply === void 0 ? void 0 : reply.parentComment));
+        if (!((_d = post.comments) === null || _d === void 0 ? void 0 : _d.find((comment) => {
+            return comment._id.toString() == (reply === null || reply === void 0 ? void 0 : reply.parentComment.toString());
+        }))) {
+            return res
+                .status(http_status_codes_1.StatusCodes.BAD_REQUEST)
+                .json({ msg: "Reply does not exist on the post specified" });
+        }
+        // Check that user owns the comment
+        if (reply.user.toString() !== userId) {
+            return res
+                .status(http_status_codes_1.StatusCodes.BAD_REQUEST)
+                .json({ msg: "You cannot edit someone else's comment!" });
+        }
+        // Validation success
+        const updatedReplyBody = req.body.body;
+        reply.body = updatedReplyBody;
+        reply.save();
+        const postWithComments = yield Post_1.Post.findOne({ _id: postId }).populate(postPopulate_1.postPopulate);
+        return res.json(postWithComments);
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+});
+exports.editReply = editReply;

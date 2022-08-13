@@ -28,6 +28,7 @@ export const addComment = async (
 
     const newComment = new Comment({
       user: userId,
+      parentPost: postId,
       body: body,
     });
 
