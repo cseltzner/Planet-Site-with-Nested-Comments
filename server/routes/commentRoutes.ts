@@ -1,7 +1,11 @@
 import express, { Router } from "express";
 import { check, validationResult } from "express-validator";
 import { StatusCodes } from "http-status-codes";
-import { addComment, editComment } from "../controllers/commentController";
+import {
+  addComment,
+  deleteComment,
+  editComment,
+} from "../controllers/commentController";
 import { authMiddleware } from "../middleware/auth";
 const router = Router();
 
@@ -52,6 +56,17 @@ router.put(
     }
 
     await editComment(req, res);
+  }
+);
+
+// @route DELETE api/posts/comments/:postId/:commentId
+// @desc Delete a comment
+// @access Private
+router.delete(
+  "/:postId/:commentId",
+  authMiddleware,
+  async (req: express.Request, res: express.Response) => {
+    await deleteComment(req, res);
   }
 );
 

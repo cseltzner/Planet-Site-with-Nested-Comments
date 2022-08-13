@@ -53,4 +53,10 @@ router.put("/:postId/:commentId", [
     }
     yield (0, commentController_1.editComment)(req, res);
 }));
+// @route DELETE api/posts/comments/:postId/:commentId
+// @desc Delete a comment
+// @access Private
+router.delete("/:postId/:commentId", auth_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield (0, commentController_1.deleteComment)(req, res);
+}));
 exports.default = router;

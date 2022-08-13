@@ -105,3 +105,60 @@ export const editComment = async (
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR);
   }
 };
+
+// Edit comment
+export const deleteComment = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  const userId = req.userId?.id;
+  const commentId = req.params.commentId;
+  const postId = req.params.postId;
+
+  if (postId.length !== 24) {
+    return res.status(StatusCodes.BAD_REQUEST).json({ msg: "Invalid Post Id" });
+  }
+
+  if (commentId.length !== 24) {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ msg: "Invalid Comment Id" });
+  }
+
+  try {
+    // Check for existing post
+    const post = await Post.findOne({ _id: postId });
+    if (!post) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ msg: "Invalid post Id" });
+    }
+
+    // Check for existing comment
+    const comment = await Comment.findById(commentId);
+    if (!comment) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ msg: "Invalid comment Id" });
+    }
+
+    // Check that user owns the comment
+    if (comment.user.toString() !== userId) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ msg: "You cannot edit someone else's comment!" });
+    }
+
+    // Validation success
+    await Comment.findByIdAndDelete(commentId);
+
+    const postWithComments = await Post.findOne({ _id: postId }).populate(
+      postPopulate
+    );
+
+    return res.json(postWithComments);
+  } catch (err) {
+    console.log(err);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR);
+  }
+};

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.editComment = exports.addComment = void 0;
+exports.deleteComment = exports.editComment = exports.addComment = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const Comment_1 = require("../models/Comment");
 const Post_1 = require("../models/Post");
@@ -96,3 +96,49 @@ const editComment = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.editComment = editComment;
+// Edit comment
+const deleteComment = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _d;
+    const userId = (_d = req.userId) === null || _d === void 0 ? void 0 : _d.id;
+    const commentId = req.params.commentId;
+    const postId = req.params.postId;
+    if (postId.length !== 24) {
+        return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({ msg: "Invalid Post Id" });
+    }
+    if (commentId.length !== 24) {
+        return res
+            .status(http_status_codes_1.StatusCodes.BAD_REQUEST)
+            .json({ msg: "Invalid Comment Id" });
+    }
+    try {
+        // Check for existing post
+        const post = yield Post_1.Post.findOne({ _id: postId });
+        if (!post) {
+            return res
+                .status(http_status_codes_1.StatusCodes.BAD_REQUEST)
+                .json({ msg: "Invalid post Id" });
+        }
+        // Check for existing comment
+        const comment = yield Comment_1.Comment.findById(commentId);
+        if (!comment) {
+            return res
+                .status(http_status_codes_1.StatusCodes.BAD_REQUEST)
+                .json({ msg: "Invalid comment Id" });
+        }
+        // Check that user owns the comment
+        if (comment.user.toString() !== userId) {
+            return res
+                .status(http_status_codes_1.StatusCodes.BAD_REQUEST)
+                .json({ msg: "You cannot edit someone else's comment!" });
+        }
+        // Validation success
+        yield Comment_1.Comment.findByIdAndDelete(commentId);
+        const postWithComments = yield Post_1.Post.findOne({ _id: postId }).populate(postPopulate_1.postPopulate);
+        return res.json(postWithComments);
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+});
+exports.deleteComment = deleteComment;
