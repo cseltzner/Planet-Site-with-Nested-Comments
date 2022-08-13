@@ -75,6 +75,11 @@ const editPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const userId = (_b = req.userId) === null || _b === void 0 ? void 0 : _b.id;
         const postId = req.params.postId;
         const body = req.body.body;
+        if (postId.length !== 24) {
+            return res
+                .status(http_status_codes_1.StatusCodes.BAD_REQUEST)
+                .json({ msg: "Invalid Post Id" });
+        }
         const post = yield Post_1.Post.findById(postId).populate(postPopulate_1.postPopulate);
         // Check if the post exists
         if (!post) {

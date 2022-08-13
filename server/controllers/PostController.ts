@@ -1,5 +1,5 @@
 import express from "express";
-import { StatusCodes } from "http-status-codes";
+import { BAD_REQUEST, StatusCodes } from "http-status-codes";
 import { Post } from "../models/Post";
 import { postPopulate } from "./postPopulate";
 
@@ -68,6 +68,12 @@ export const editPost = async (req: express.Request, res: express.Response) => {
     const userId = req.userId?.id;
     const postId = req.params.postId;
     const body = req.body.body;
+
+    if (postId.length !== 24) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ msg: "Invalid Post Id" });
+    }
 
     const post = await Post.findById(postId).populate(postPopulate);
 

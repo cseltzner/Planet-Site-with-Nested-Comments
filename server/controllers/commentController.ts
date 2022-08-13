@@ -14,6 +14,10 @@ export const addComment = async (
   const postId = req.params.postId;
   let post;
 
+  if (postId.length !== 24) {
+    return res.status(StatusCodes.BAD_REQUEST).json({ msg: "Invalid Post Id" });
+  }
+
   try {
     post = await Post.findOne({ _id: postId });
     if (!post) {
@@ -50,6 +54,16 @@ export const editComment = async (
   const userId = req.userId?.id;
   const commentId = req.params.commentId;
   const postId = req.params.postId;
+
+  if (postId.length !== 24) {
+    return res.status(StatusCodes.BAD_REQUEST).json({ msg: "Invalid Post Id" });
+  }
+
+  if (commentId.length !== 24) {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ msg: "Invalid Comment Id" });
+  }
 
   try {
     // Check for existing post
