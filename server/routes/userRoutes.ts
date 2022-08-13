@@ -4,17 +4,17 @@ import { StatusCodes } from "http-status-codes";
 import { getAllUsers, registerUser } from "../controllers/userController";
 const router = Router();
 
-// @route GET api/users
-// @desc Get all users
-// @access Public
+// @route   GET api/users
+// @desc    Get all users
+// @access  Public
 router.get("/", async (req, res) => {
   await getAllUsers(req, res);
 });
 
-// @route POST api/users
-// @desc Register User
-// @access Public
-// @body username:String , email:String , password:String, favPlanet:Number? (from 1 to 9)
+// @route   POST api/users
+// @desc    Register User
+// @access  Public
+// @body    username:String , email:String , password:String, favPlanet:Number? (from 1 to 9)
 router.post(
   "/",
   [

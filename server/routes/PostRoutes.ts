@@ -10,10 +10,10 @@ import {
 import { authMiddleware } from "../middleware/auth";
 const router = Router();
 
-// @route POST api/posts/:planetId (eg. Planet 1 = Mercury)
-// @desc Create a post
-// @access Private
-// @body title:String, body:String
+// @route   POST api/posts/:planetId (eg. Planet 1 = Mercury)
+// @desc    Create a post
+// @access  Private
+// @body    title:String, body:String
 router.post(
   "/:planetId", // planetId: Number(1 through 9)
   [
@@ -38,9 +38,9 @@ router.post(
   }
 );
 
-// @route GET api/posts/:planetId (eg. Planet 1 = Mercury)
-// @desc Get all posts for a planet
-// @access Public
+// @route   GET api/posts/:planetId (eg. Planet 1 = Mercury)
+// @desc    Get all posts for a planet
+// @access  Public
 router.get(
   "/:planetId",
   async (req: express.Request, res: express.Response) => {
@@ -48,10 +48,10 @@ router.get(
   }
 );
 
-// @route PUT api/posts/:postId
-// @desc Edit post body
-// @access Private
-// @body body:String
+// @route   PUT api/posts/:postId
+// @desc    Edit post body
+// @access  Private
+// @body    body:String
 router.put(
   "/:postId",
   [
@@ -72,9 +72,9 @@ router.put(
   }
 );
 
-// @route DELETE api/posts/:postId
-// @desc Delete post
-// @access Private
+// @route   DELETE api/posts/:postId
+// @desc    Delete post
+// @access  Private
 router.delete(
   "/:postId",
   authMiddleware,

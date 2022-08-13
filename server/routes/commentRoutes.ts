@@ -9,10 +9,10 @@ import {
 import { authMiddleware } from "../middleware/auth";
 const router = Router();
 
-// @route POST api/posts/comments/:postId
-// @desc Create a comment
-// @access Private
-// @body body:String
+// @route   POST api/posts/comments/:postId
+// @desc    Create a comment
+// @access  Private
+// @body    body:String
 router.post(
   "/:postId",
   [
@@ -34,10 +34,10 @@ router.post(
   }
 );
 
-// @route PUT api/posts/comments/:postId/:commentId
-// @desc Edit a comment
-// @access Private
-// @body body:String
+// @route   PUT api/posts/comments/:postId/:commentId
+// @desc    Edit a comment
+// @access  Private
+// @body    body:String
 router.put(
   "/:postId/:commentId",
   [
@@ -59,9 +59,9 @@ router.put(
   }
 );
 
-// @route DELETE api/posts/comments/:postId/:commentId
-// @desc Delete a comment
-// @access Private
+// @route   DELETE api/posts/comments/:postId/:commentId
+// @desc    Delete a comment
+// @access  Private
 router.delete(
   "/:postId/:commentId",
   authMiddleware,
