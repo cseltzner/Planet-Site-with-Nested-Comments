@@ -5,6 +5,7 @@ import userRouter from "./routes/userRoutes";
 import postRouter from "./routes/postRoutes";
 import commentRouter from "./routes/commentRoutes";
 import childCommentRouter from "./routes/childCommentRoutes";
+import authRouter from "./routes/authRoutes";
 dotEnv.config();
 
 const app = express();
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use("/api/users", userRouter);
 app.use("/api/posts", postRouter);
 app.use("/api/posts/comments", commentRouter, childCommentRouter);
+app.use("/api/auth", authRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello from the server");

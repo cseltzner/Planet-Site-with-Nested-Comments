@@ -14,16 +14,16 @@ const express_validator_1 = require("express-validator");
 const http_status_codes_1 = require("http-status-codes");
 const userController_1 = require("../controllers/userController");
 const router = (0, express_1.Router)();
-// @route GET api/users
-// @desc Get all users
-// @access Public
+// @route   GET api/users
+// @desc    Get all users
+// @access  Public
 router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, userController_1.getAllUsers)(req, res);
 }));
-// @route POST api/users
-// @desc Register User
-// @access Public
-// @body username:String , email:String , password:String, favPlanet:Number? (from 1 to 9)
+// @route   POST api/users
+// @desc    Register User
+// @access  Public
+// @body    username:String , email:String , password:String, favPlanet:Number? (from 1 to 9)
 router.post("/", [
     (0, express_validator_1.check)("username", "Username must be at least 2 characters long").isLength({
         min: 2,

@@ -15,10 +15,10 @@ const http_status_codes_1 = require("http-status-codes");
 const commentController_1 = require("../controllers/commentController");
 const auth_1 = require("../middleware/auth");
 const router = (0, express_1.Router)();
-// @route POST api/posts/comments/:postId
-// @desc Create a comment
-// @access Private
-// @body body:String
+// @route   POST api/posts/comments/:postId
+// @desc    Create a comment
+// @access  Private
+// @body    body:String
 router.post("/:postId", [
     auth_1.authMiddleware,
     (0, express_validator_1.check)("body", "Comment body must not be empty").not().isEmpty(),
@@ -34,10 +34,10 @@ router.post("/:postId", [
     }
     yield (0, commentController_1.addComment)(req, res);
 }));
-// @route PUT api/posts/comments/:postId/:commentId
-// @desc Edit a comment
-// @access Private
-// @body body:String
+// @route   PUT api/posts/comments/:postId/:commentId
+// @desc    Edit a comment
+// @access  Private
+// @body    body:String
 router.put("/:postId/:commentId", [
     auth_1.authMiddleware,
     (0, express_validator_1.check)("body", "Comment body must not be empty").not().isEmpty(),
@@ -53,9 +53,9 @@ router.put("/:postId/:commentId", [
     }
     yield (0, commentController_1.editComment)(req, res);
 }));
-// @route DELETE api/posts/comments/:postId/:commentId
-// @desc Delete a comment
-// @access Private
+// @route   DELETE api/posts/comments/:postId/:commentId
+// @desc    Delete a comment
+// @access  Private
 router.delete("/:postId/:commentId", auth_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, commentController_1.deleteComment)(req, res);
 }));

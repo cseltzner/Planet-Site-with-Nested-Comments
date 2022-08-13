@@ -15,16 +15,10 @@ const http_status_codes_1 = require("http-status-codes");
 const postController_1 = require("../controllers/postController");
 const auth_1 = require("../middleware/auth");
 const router = (0, express_1.Router)();
-// @route GET api/posts/:planet
-// @desc Get all posts
-// @access Public
-router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // @todo get all posts
-}));
-// @route POST api/posts/:planetId (eg. Planet 1 = Mercury)
-// @desc Create a post
-// @access Private
-// @body title:String, body:String
+// @route   POST api/posts/:planetId (eg. Planet 1 = Mercury)
+// @desc    Create a post
+// @access  Private
+// @body    title:String, body:String
 router.post("/:planetId", // planetId: Number(1 through 9)
 [
     auth_1.authMiddleware,
@@ -45,16 +39,16 @@ router.post("/:planetId", // planetId: Number(1 through 9)
     }
     yield (0, postController_1.createPost)(req, res);
 }));
-// @route GET api/posts/:planetId (eg. Planet 1 = Mercury)
-// @desc Get all posts for a planet
-// @access Public
+// @route   GET api/posts/:planetId (eg. Planet 1 = Mercury)
+// @desc    Get all posts for a planet
+// @access  Public
 router.get("/:planetId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, postController_1.getAllPosts)(req, res);
 }));
-// @route PUT api/posts/:postId
-// @desc Edit post body
-// @access Private
-// @body body:String
+// @route   PUT api/posts/:postId
+// @desc    Edit post body
+// @access  Private
+// @body    body:String
 router.put("/:postId", [
     auth_1.authMiddleware,
     (0, express_validator_1.check)("body", "Post body must not be empty").not().isEmpty(),
@@ -70,9 +64,9 @@ router.put("/:postId", [
     }
     yield (0, postController_1.editPost)(req, res);
 }));
-// @route DELETE api/posts/:postId
-// @desc Delete post
-// @access Private
+// @route   DELETE api/posts/:postId
+// @desc    Delete post
+// @access  Private
 router.delete("/:postId", auth_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, postController_1.deletePost)(req, res);
 }));
