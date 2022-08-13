@@ -70,4 +70,10 @@ router.put("/:postId", [
     }
     yield (0, postController_1.editPost)(req, res);
 }));
+// @route DELETE api/posts/:postId
+// @desc Delete post
+// @access Private
+router.delete("/:postId", auth_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield (0, postController_1.deletePost)(req, res);
+}));
 exports.default = router;

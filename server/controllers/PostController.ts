@@ -29,9 +29,8 @@ export const createPost = async (
       planet: planetId,
     });
 
-    const post = await newPost.save();
-
-    return res.json(post);
+    await newPost.save();
+    await getAllPosts(req, res, planetId);
   } catch (err) {
     console.log(err);
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Server Error");
@@ -39,14 +38,19 @@ export const createPost = async (
   }
 };
 
-// Get all posts
+// Get all posts for a specific planet
 export const getAllPosts = async (
   req: express.Request,
-  res: express.Response
+  res: express.Response,
+  planet?: Number
 ) => {
-  let planetId;
+  let planetId = planet;
+  // Check to make sure planetId is a number
   try {
-    planetId = Number(req.params.planetId);
+    // Use http params if planet not passed as argument
+    if (!planet) {
+      planetId = Number(req.params.planetId);
+    }
   } catch (err) {
     res.status(StatusCodes.BAD_REQUEST).send("planetId must be a number");
   }
@@ -92,8 +96,51 @@ export const editPost = async (req: express.Request, res: express.Response) => {
     }
 
     post.body = body;
-    const updatedPost = await post.save();
-    res.json(updatedPost);
+    await post.save();
+    await getAllPosts(req, res, post.planet);
+  } catch (err) {
+    console.log(err);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Server Error");
+    return;
+  }
+};
+
+// Delete post
+export const deletePost = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const userId = req.userId?.id;
+    const postId = req.params.postId;
+
+    if (postId.length !== 24) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ msg: "Invalid Post Id" });
+    }
+
+    const post = await Post.findById(postId);
+
+    // Check if the post exists
+    if (!post) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ msg: "Invalid post Id" });
+    }
+
+    // Check that user owns the post
+    if (post.user.toString() !== userId) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ msg: "You cannot edit someone else's post!" });
+    }
+
+    const planetId = post?.planet;
+    await Post.findByIdAndDelete(postId);
+
+    // Return updated post list
+    getAllPosts(req, res, planetId);
   } catch (err) {
     console.log(err);
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Server Error");

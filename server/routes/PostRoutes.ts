@@ -3,6 +3,7 @@ import { check, validationResult } from "express-validator";
 import { StatusCodes } from "http-status-codes";
 import {
   createPost,
+  deletePost,
   editPost,
   getAllPosts,
 } from "../controllers/postController";
@@ -75,6 +76,18 @@ router.put(
         .json({ errors: errors.array() });
     }
     await editPost(req, res);
+  }
+);
+
+// @route DELETE api/posts/:postId
+// @desc Delete post
+// @access Private
+router.delete(
+  "/:postId",
+  authMiddleware,
+
+  async (req: express.Request, res: express.Response) => {
+    await deletePost(req, res);
   }
 );
 

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.editPost = exports.getAllPosts = exports.createPost = void 0;
+exports.deletePost = exports.editPost = exports.getAllPosts = exports.createPost = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const Post_1 = require("../models/Post");
 const postPopulate_1 = require("./postPopulate");
@@ -36,8 +36,8 @@ const createPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             body: body,
             planet: planetId,
         });
-        const post = yield newPost.save();
-        return res.json(post);
+        yield newPost.save();
+        yield (0, exports.getAllPosts)(req, res, planetId);
     }
     catch (err) {
         console.log(err);
@@ -46,11 +46,15 @@ const createPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.createPost = createPost;
-// Get all posts
-const getAllPosts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let planetId;
+// Get all posts for a specific planet
+const getAllPosts = (req, res, planet) => __awaiter(void 0, void 0, void 0, function* () {
+    let planetId = planet;
+    // Check to make sure planetId is a number
     try {
-        planetId = Number(req.params.planetId);
+        // Use http params if planet not passed as argument
+        if (!planet) {
+            planetId = Number(req.params.planetId);
+        }
     }
     catch (err) {
         res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).send("planetId must be a number");
@@ -94,8 +98,8 @@ const editPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 .json({ msg: "You cannot edit someone else's post!" });
         }
         post.body = body;
-        const updatedPost = yield post.save();
-        res.json(updatedPost);
+        yield post.save();
+        yield (0, exports.getAllPosts)(req, res, post.planet);
     }
     catch (err) {
         console.log(err);
@@ -104,3 +108,39 @@ const editPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.editPost = editPost;
+// Delete post
+const deletePost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _c;
+    try {
+        const userId = (_c = req.userId) === null || _c === void 0 ? void 0 : _c.id;
+        const postId = req.params.postId;
+        if (postId.length !== 24) {
+            return res
+                .status(http_status_codes_1.StatusCodes.BAD_REQUEST)
+                .json({ msg: "Invalid Post Id" });
+        }
+        const post = yield Post_1.Post.findById(postId);
+        // Check if the post exists
+        if (!post) {
+            return res
+                .status(http_status_codes_1.StatusCodes.BAD_REQUEST)
+                .json({ msg: "Invalid post Id" });
+        }
+        // Check that user owns the post
+        if (post.user.toString() !== userId) {
+            return res
+                .status(http_status_codes_1.StatusCodes.BAD_REQUEST)
+                .json({ msg: "You cannot edit someone else's post!" });
+        }
+        const planetId = post === null || post === void 0 ? void 0 : post.planet;
+        yield Post_1.Post.findByIdAndDelete(postId);
+        // Return updated post list
+        (0, exports.getAllPosts)(req, res, planetId);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).send("Server Error");
+        return;
+    }
+});
+exports.deletePost = deletePost;
