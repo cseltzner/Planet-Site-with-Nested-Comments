@@ -6,8 +6,9 @@ export interface PostInterface extends Document {
   user: UserInterface["_id"];
   title: String;
   body: String;
-  likes: UserInterface["_id"][];
-  comments: CommentInterface["_id"][];
+  planet: Number;
+  likes?: UserInterface["_id"][];
+  comments?: CommentInterface["_id"][];
 }
 
 const PostSchema: Schema = new mongoose.Schema(
@@ -20,10 +21,20 @@ const PostSchema: Schema = new mongoose.Schema(
     title: {
       type: String,
       required: true,
+      maxlength: 300,
+      minlength: 1,
     },
     body: {
       type: String,
       required: true,
+      maxlength: 5000,
+      minlength: 1,
+    },
+    planet: {
+      type: Number,
+      required: true,
+      min: 1,
+      max: 9,
     },
     likes: [
       {

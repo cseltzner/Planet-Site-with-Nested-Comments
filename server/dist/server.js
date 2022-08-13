@@ -7,6 +7,7 @@ const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const db_1 = require("./config/db");
 const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
+const PostRoutes_1 = __importDefault(require("./routes/PostRoutes"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 (0, db_1.connectDB)();
@@ -14,6 +15,7 @@ const app = (0, express_1.default)();
 app.use(express_1.default.json());
 // Routes
 app.use("/api/users", userRoutes_1.default);
+app.use("/api/posts", PostRoutes_1.default);
 app.get("/", (req, res) => {
     res.send("Hello from the server");
 });
