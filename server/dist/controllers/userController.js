@@ -22,7 +22,7 @@ dotenv_1.default.config();
 // Gets all users from DB
 const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const users = yield User_1.User.find().select("username email");
+        const users = yield User_1.User.find().select("-password");
         res.json(users);
     }
     catch (err) {

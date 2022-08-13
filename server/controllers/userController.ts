@@ -13,7 +13,7 @@ export const getAllUsers = async (
   res: express.Response
 ) => {
   try {
-    const users = await User.find().select("username email");
+    const users = await User.find().select("-password");
     res.json(users);
   } catch (err) {
     console.log(err);

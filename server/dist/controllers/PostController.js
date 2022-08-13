@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createPost = void 0;
+exports.getAllPosts = exports.createPost = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const Post_1 = require("../models/Post");
 // Create a post
@@ -21,9 +21,11 @@ const createPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     // Check if planetId is a number
     try {
         planetId = Number(req.params.planetId);
+        if (planetId < 1 || planetId > 9)
+            throw new Error();
     }
     catch (err) {
-        res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).send("planetId must be a number");
+        res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).send("planetId must be a valid number");
         return;
     }
     try {
@@ -41,6 +43,25 @@ const createPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).send("Server Error");
         return;
     }
-    res.send("post 'created'");
 });
 exports.createPost = createPost;
+// Get all posts
+const getAllPosts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let planetId;
+    try {
+        planetId = Number(req.params.planetId);
+    }
+    catch (err) {
+        res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).send("planetId must be a number");
+    }
+    try {
+        const posts = yield Post_1.Post.find({ planet: planetId }).sort({ date: -1 });
+        return res.json(posts);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).send("Server Error");
+        return;
+    }
+});
+exports.getAllPosts = getAllPosts;

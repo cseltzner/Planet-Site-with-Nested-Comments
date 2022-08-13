@@ -60,7 +60,7 @@ const PostSchema = new mongoose_1.default.Schema({
     comments: [
         {
             type: mongoose_1.Schema.Types.ObjectId,
-            ref: "comment", // Don't forget to call .populate on the find method!
+            ref: "comment",
         },
     ],
 }, { timestamps: true });

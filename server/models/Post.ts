@@ -47,7 +47,7 @@ const PostSchema: Schema = new mongoose.Schema(
     comments: [
       {
         type: Schema.Types.ObjectId,
-        ref: "comment", // Don't forget to call .populate on the find method!
+        ref: "comment",
       },
     ],
   },

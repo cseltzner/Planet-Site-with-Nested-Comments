@@ -2,7 +2,8 @@ import express from "express";
 import dotEnv from "dotenv";
 import { connectDB } from "./config/db";
 import userRouter from "./routes/userRoutes";
-import postRouter from "./routes/PostRoutes";
+import postRouter from "./routes/postRoutes";
+import commentRouter from "./routes/commentRoutes";
 dotEnv.config();
 
 const app = express();
@@ -14,6 +15,7 @@ app.use(express.json());
 // Routes
 app.use("/api/users", userRouter);
 app.use("/api/posts", postRouter);
+app.use("/api/posts/comments", commentRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello from the server");

@@ -1,7 +1,7 @@
 import express, { Router } from "express";
 import { check, validationResult } from "express-validator";
 import { StatusCodes } from "http-status-codes";
-import { createPost } from "../controllers/PostController";
+import { createPost, getAllPosts } from "../controllers/postController";
 import { authMiddleware } from "../middleware/auth";
 const router = Router();
 
@@ -37,6 +37,16 @@ router.post(
         .json({ errors: errors.array() });
     }
     await createPost(req, res);
+  }
+);
+
+// @route GET api/posts/:planetId (eg. Planet 1 = Mercury)
+// @desc Get all posts for a planet
+// @access Public
+router.get(
+  "/:planetId",
+  async (req: express.Request, res: express.Response) => {
+    await getAllPosts(req, res);
   }
 );
 
