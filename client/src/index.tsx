@@ -7,8 +7,8 @@ import reportWebVitals from "./reportWebVitals";
 import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 import { Route, Routes } from "react-router";
-import PlanetPage from "./components/pages/PlanetPage";
-import RandomPlanet from "./components/pages/RandomPlanet";
+import PlanetPage from "./components/primary-pages/PlanetPage";
+import RandomPlanet from "./components/primary-pages/RandomPlanet";
 
 const container = document.getElementById("root")!;
 const root = createRoot(container);

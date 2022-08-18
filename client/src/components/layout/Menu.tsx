@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { planets } from "../data/data";
+import { planets } from "../../data/data";
 
 interface Props {
   isHidden: boolean;

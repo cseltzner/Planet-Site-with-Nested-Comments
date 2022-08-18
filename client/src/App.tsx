@@ -1,7 +1,7 @@
 import React from "react";
 import { Outlet, useParams } from "react-router";
-import Navbar from "./components/Navbar";
-import RandomPlanet from "./components/pages/RandomPlanet";
+import Navbar from "./components/layout/Navbar";
+import RandomPlanet from "./components/primary-pages/RandomPlanet";
 
 function App() {
   const params = useParams();
