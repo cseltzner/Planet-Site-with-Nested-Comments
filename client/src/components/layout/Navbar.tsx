@@ -144,13 +144,22 @@ const Navbar = () => {
             </Link>
           </li>
         </ul>
-        {/* Sign in button (Med screens and above) */}
-        <Link
-          to="/login"
-          className="align-align-self-center hidden min-w-fit text-lg text-white opacity-90 hover:opacity-100 md:inline-block lg:text-xl"
-        >
-          Sign in
-        </Link>
+        <div>
+          {/* Sign in button (Med screens and above) */}
+          <Link
+            to="/login"
+            className="align-align-self-center mr-6 hidden min-w-fit text-lg text-white opacity-90 hover:opacity-100 md:inline-block lg:text-xl"
+          >
+            Sign in
+          </Link>
+          {/* Register button (Med screens and above) */}
+          <Link
+            to="/register"
+            className="align-align-self-center hidden min-w-fit text-lg text-secondary-orange  hover:opacity-90 md:inline-block lg:text-xl"
+          >
+            Register
+          </Link>
+        </div>
         {/* Hamburger button (Smaller than med screens) */}
         <div className="md:hidden" onClick={() => menuToggle()}>
           <svg

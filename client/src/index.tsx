@@ -9,6 +9,8 @@ import { BrowserRouter } from "react-router-dom";
 import { Route, Routes } from "react-router";
 import PlanetPage from "./components/primary-pages/PlanetPage";
 import RandomPlanet from "./components/primary-pages/RandomPlanet";
+import Register from "./components/auth/Register";
+import Login from "./components/auth/Login";
 
 const container = document.getElementById("root")!;
 const root = createRoot(container);
@@ -20,6 +22,8 @@ root.render(
         <Routes>
           <Route path="/" element={<App />}>
             <Route path="planets/:planet" element={<PlanetPage />} />
+            <Route path="register" element={<Register />} />
+            <Route path="login" element={<Login />} />
             <Route path="*" element={<RandomPlanet />} />
           </Route>
         </Routes>

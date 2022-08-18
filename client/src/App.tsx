@@ -1,10 +1,11 @@
 import React from "react";
-import { Outlet, useParams } from "react-router";
+import { Outlet, useOutlet } from "react-router";
 import Navbar from "./components/layout/Navbar";
 import RandomPlanet from "./components/primary-pages/RandomPlanet";
 
 function App() {
-  const params = useParams();
+  const outlet = useOutlet();
+
   return (
     <>
       {/* Background image */}
@@ -13,9 +14,9 @@ function App() {
         style={{ backgroundImage: "url(./img/Starry-night.svg)" }}
       >
         <Navbar />
-        {/* If no params (eg. https://url.com/), send to random planet */}
-        {Object.keys(params).length === 0 && <RandomPlanet />}
         <Outlet />
+        {/* If outlet is null (user is on http://url.com/) return a random planet */}
+        {!outlet && <RandomPlanet />}
       </div>
     </>
   );

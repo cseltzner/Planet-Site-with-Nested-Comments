@@ -102,3 +102,7 @@ export const planets = [
   "Neptune",
   "Pluto",
 ];
+
+export const getRandomPlanet = () => {
+  return planets[Math.floor(Math.random() * 9)];
+};

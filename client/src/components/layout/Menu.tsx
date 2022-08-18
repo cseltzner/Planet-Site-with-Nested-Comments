@@ -26,7 +26,7 @@ const NavMenu = (props: Props) => {
           return (
             <li
               key={index}
-              className="border border-white border-opacity-50 py-4 text-3xl"
+              className="border border-white border-opacity-50 py-3 text-2xl"
             >
               <Link
                 className="opacity-90"
@@ -39,7 +39,7 @@ const NavMenu = (props: Props) => {
           );
         })}
         {/* Sign in button */}
-        <li className="border border-white border-opacity-50 py-4 text-3xl">
+        <li className="border border-white border-opacity-50 py-3 text-2xl">
           <Link
             className="text-secondary-orange opacity-90"
             to={`/login`}
@@ -48,13 +48,23 @@ const NavMenu = (props: Props) => {
             Sign in
           </Link>
         </li>
+        {/* Register button */}
+        <li className="border border-white border-opacity-50 py-3 text-2xl">
+          <Link
+            className="text-secondary-orange opacity-90"
+            to={`/register`}
+            onClick={() => closeMenuClicked()}
+          >
+            Register
+          </Link>
+        </li>
       </ul>
       <svg
         onClick={() => closeMenuClicked()}
         xmlns="http://www.w3.org/2000/svg"
         className={`${
           isHidden ? "opacity-0" : "opacity-100"
-        } fixed top-8 right-8 h-8 w-8 text-white`}
+        } fixed top-6 right-8 h-8 w-8 rounded-full bg-gray-700 p-1 text-white`}
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
