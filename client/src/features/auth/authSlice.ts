@@ -38,6 +38,23 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
       state.loading = false;
     },
+    loginSuccess: (state, action) => {
+      localStorage.setItem("token", action.payload.token);
+      state.token = action.payload;
+      (state.isAuthenticated = true), (state.loading = false);
+    },
+    loginFail: (state) => {
+      localStorage.removeItem("token");
+      state.token = null;
+      state.isAuthenticated = false;
+      state.loading = false;
+    },
+    logout: (state) => {
+      localStorage.removeItem("token");
+      state.token = null;
+      state.isAuthenticated = false;
+      state.loading = false;
+    },
   },
 });
 

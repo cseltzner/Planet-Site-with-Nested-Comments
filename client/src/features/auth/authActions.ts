@@ -44,3 +44,37 @@ export const loadUser = () => async (dispatch: Dispatch) => {
     dispatch(authActions.authError());
   }
 };
+
+// Log in user
+export const login =
+  (usernameOrEmail: string, password: string) =>
+  async (dispatch: Dispatch<any>) => {
+    let body: string;
+
+    if (usernameOrEmail.includes("@")) {
+      body = JSON.stringify({ email: usernameOrEmail, password });
+    } else {
+      body = JSON.stringify({ username: usernameOrEmail, password });
+    }
+
+    try {
+      const res = await axios.post("/api/auth", body, defaultHeaders);
+      dispatch(authActions.loginSuccess(res.data));
+      dispatch(loadUser());
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const errors = error?.response?.data.errors as { msg: string }[];
+        if (errors) {
+          errors.forEach((error) =>
+            dispatch(setAlert(error.msg, AlertTypes.DANGER))
+          );
+        }
+        dispatch(authActions.loginFail());
+      }
+    }
+  };
+
+// Logout user
+export const logout = () => async (dispatch: Dispatch<any>) => {
+  dispatch(authActions.logout());
+};
