@@ -1,7 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 const Login = () => {
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+  });
+
+  const onFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
   const loginSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
   };
@@ -20,6 +29,9 @@ const Login = () => {
             type="text"
             name="username"
             id="username"
+            onChange={(e) => {
+              onFormChange(e);
+            }}
             className="mt-0.5 w-full border border-white border-opacity-50 bg-black bg-opacity-50 px-4 py-2 text-lg tracking-wider text-white invalid:border-red-700 sm:min-w-[400px]"
           />
           <label htmlFor="password" className="mt-8 tracking-wide text-white">
@@ -29,6 +41,9 @@ const Login = () => {
             type="password"
             name="password"
             id="password"
+            onChange={(e) => {
+              onFormChange(e);
+            }}
             className="mt-0.5 w-full border border-white border-opacity-50 bg-black bg-opacity-50 px-4 py-2 text-lg tracking-wider text-white invalid:border-red-700 sm:min-w-[400px]"
           />
           <p className="mt-2 text-white text-opacity-60">
