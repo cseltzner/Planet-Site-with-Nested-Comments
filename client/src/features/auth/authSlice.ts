@@ -41,7 +41,8 @@ const authSlice = createSlice({
     loginSuccess: (state, action) => {
       localStorage.setItem("token", action.payload.token);
       state.token = action.payload;
-      (state.isAuthenticated = true), (state.loading = false);
+      state.isAuthenticated = true;
+      state.loading = false;
     },
     loginFail: (state) => {
       localStorage.removeItem("token");

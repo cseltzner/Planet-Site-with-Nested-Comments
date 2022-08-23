@@ -1,7 +1,12 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { login } from "../../features/auth/authActions";
 
 const Login = () => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -13,7 +18,14 @@ const Login = () => {
 
   const loginSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
+    dispatch(login(formData.username, formData.password));
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      return navigate("/");
+    }
+  }, [isAuthenticated]);
 
   return (
     <>

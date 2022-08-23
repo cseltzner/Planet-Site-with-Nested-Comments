@@ -1,13 +1,21 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { planets } from "../../data/data";
+import { setAlert } from "../../features/alert/alertActions";
+import { AlertTypes } from "../../features/alert/alertSlice";
+import { register } from "../../features/auth/authActions";
+import { validateRegistration } from "../../util/validateRegistration";
 
 const Register = () => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     password: "",
-    favPlanet: 1,
+    confirmPassword: "",
   });
 
   const [planetSelected, setPlanetSelected] = useState<null | number>(null);
@@ -19,7 +27,32 @@ const Register = () => {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
+
+    try {
+      validateRegistration({
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+        confirmPassword: formData.confirmPassword,
+      });
+    } catch (err) {
+      dispatch(setAlert((err as Error).message, AlertTypes.DANGER));
+    }
+
+    const registerArgs = {
+      username: formData.username,
+      email: formData.email,
+      password: formData.password,
+      planetSelected: planetSelected,
+    };
+    dispatch(register(registerArgs));
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated]);
 
   return (
     <>
@@ -38,6 +71,7 @@ const Register = () => {
             type="text"
             name="username"
             id="username"
+            onChange={(e) => onFormChange(e)}
             className="mt-0.5 w-full border border-white border-opacity-50 bg-black bg-opacity-50 px-4 py-2 text-lg tracking-wider text-white invalid:border-red-700 sm:min-w-[400px]"
           />
           <label
@@ -50,6 +84,7 @@ const Register = () => {
             type="email"
             name="email"
             id="email"
+            onChange={(e) => onFormChange(e)}
             className="mt-0.5 w-full border border-white border-opacity-50 bg-black bg-opacity-50 px-4 py-2 text-lg tracking-wider text-white invalid:border-red-700 sm:min-w-[400px]"
           />
           <label
@@ -62,6 +97,7 @@ const Register = () => {
             type="password"
             name="password"
             id="password"
+            onChange={(e) => onFormChange(e)}
             className="mt-0.5 w-full border border-white border-opacity-50 bg-black bg-opacity-50 px-4 py-2 text-lg tracking-wider text-white invalid:border-red-700 sm:min-w-[400px]"
           />
           <label
@@ -72,8 +108,9 @@ const Register = () => {
           </label>
           <input
             type="password"
-            name="confirm-password"
-            id="confirm-password"
+            name="confirmPassword"
+            id="confirmPassword"
+            onChange={(e) => onFormChange(e)}
             className="mt-0.5 w-full border border-white border-opacity-50 bg-black bg-opacity-50 px-4 py-2 text-lg tracking-wider text-white invalid:border-red-700 sm:min-w-[400px]"
           />
           <p className="mt-2 text-white text-opacity-60">

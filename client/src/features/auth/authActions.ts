@@ -8,10 +8,20 @@ import { AlertTypes } from "../alert/alertSlice";
 
 // Register
 export const register =
-  (user: { username: string; email: string; password: string }) =>
+  (user: {
+    username: string;
+    email: string;
+    password: string;
+    favPlanet?: number;
+  }) =>
   async (dispatch: Dispatch<any>) => {
-    const { username, email, password } = user;
-    const body = JSON.stringify({ username, email, password });
+    const { username, email, password, favPlanet } = user;
+    let body;
+    if (favPlanet) {
+      body = JSON.stringify({ username, email, password, favPlanet });
+    } else {
+      body = JSON.stringify({ username, email, password });
+    }
 
     try {
       dispatch(authActions.setLoading());
