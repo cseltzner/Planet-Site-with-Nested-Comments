@@ -28,6 +28,9 @@ export const register =
       const res = await axios.post("/api/users", body, defaultHeaders);
 
       dispatch(authActions.registerSuccess(res.data));
+      dispatch(
+        setAlert("Your account has been registered", AlertTypes.SUCCESS)
+      );
     } catch (error) {
       if (error instanceof AxiosError) {
         const errors = error?.response?.data.errors as { msg: string }[];
@@ -70,6 +73,7 @@ export const login =
     try {
       const res = await axios.post("/api/auth", body, defaultHeaders);
       dispatch(authActions.loginSuccess(res.data));
+      dispatch(setAlert("You are now logged in", AlertTypes.SUCCESS));
       dispatch(loadUser());
     } catch (error) {
       if (error instanceof AxiosError) {

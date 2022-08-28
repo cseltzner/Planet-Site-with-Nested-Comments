@@ -11,7 +11,7 @@ interface Props {
 const Alert = (props: Props) => {
   return (
     <div
-      className={`absolute inset-0 mt-12 flex flex-col gap-4 opacity-[96] ${
+      className={`fixed inset-0 mt-12 flex flex-col gap-4 opacity-[96] ${
         props.alerts.length < 1 && "hidden"
       }`}
     >

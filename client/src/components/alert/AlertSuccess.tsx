@@ -6,7 +6,7 @@ interface Props {
 
 const AlertSuccess = (props: Props) => {
   return (
-    <div className="relative mx-auto flex w-10/12 flex-col rounded-lg bg-green-50 p-4">
+    <div className="relative mx-auto flex w-10/12 flex-col rounded-lg bg-green-50 p-4 shadow-xl">
       <div className="absolute top-0 bottom-0 left-0 w-1 rounded-tl rounded-bl bg-green-400"></div>
       <div className="flex items-start gap-6">
         <div className="mt-[2px] w-4 text-green-400" id="alert-close">
