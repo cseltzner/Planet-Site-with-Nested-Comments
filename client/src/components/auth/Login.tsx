@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { login } from "../../features/auth/authActions";
+import Spinner from "../layout/Spinner";
 
 const Login = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
+  const isLoading = useAppSelector((state) => state.auth.loading);
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -68,7 +70,7 @@ const Login = () => {
             onClick={(e) => loginSubmit(e)}
             className="mt-8 inline-block w-full bg-secondary-orange py-2 text-xl text-white hover:opacity-95 sm:text-2xl"
           >
-            Sign in
+            {isLoading ? <Spinner /> : "Sign in"}
           </button>
         </form>
       </div>

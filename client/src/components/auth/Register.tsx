@@ -6,11 +6,13 @@ import { setAlert } from "../../features/alert/alertActions";
 import { register } from "../../features/auth/authActions";
 import { AlertTypes } from "../../util/alertTypes";
 import { validateRegistration } from "../../util/validateRegistration";
+import Spinner from "../layout/Spinner";
 
 const Register = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
+  const isLoading = useAppSelector((state) => state.auth.loading);
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -148,7 +150,7 @@ const Register = () => {
             onClick={(e) => registerSubmit(e)}
             className="mt-8 inline-block w-full bg-secondary-orange py-2 text-xl text-white hover:opacity-95 sm:text-2xl"
           >
-            Create your account
+            {isLoading ? <Spinner /> : "Create your account"}
           </button>
         </form>
       </div>

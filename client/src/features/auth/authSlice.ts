@@ -5,7 +5,7 @@ import { defaultHeaders } from "../../util/defaultHeaders";
 const initialState = {
   token: localStorage.getItem("token"),
   isAuthenticated: false,
-  loading: true,
+  loading: false,
   user: null,
 };
 

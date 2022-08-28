@@ -64,6 +64,19 @@ export const login =
   async (dispatch: Dispatch<any>) => {
     let body: string;
 
+    if (!usernameOrEmail || !password) {
+      dispatch(authActions.loginFail());
+      if (!usernameOrEmail) {
+        dispatch(
+          setAlert("Please enter your username or email", AlertTypes.DANGER)
+        );
+      }
+      if (!password) {
+        dispatch(setAlert("Please enter your password", AlertTypes.DANGER));
+      }
+      return;
+    }
+
     if (usernameOrEmail.includes("@")) {
       body = JSON.stringify({ email: usernameOrEmail, password });
     } else {
@@ -71,6 +84,7 @@ export const login =
     }
 
     try {
+      dispatch(authActions.setLoading());
       const res = await axios.post("/api/auth", body, defaultHeaders);
       dispatch(authActions.loginSuccess(res.data));
       dispatch(setAlert("You are now logged in", AlertTypes.SUCCESS));
