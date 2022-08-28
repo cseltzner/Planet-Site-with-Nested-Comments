@@ -17,7 +17,9 @@ const PlanetPage = () => {
         />
         <div className="flex flex-col items-center md:items-start">
           <h1 className="text-7xl opacity-90">{name}</h1>
-          <p className="mt-8 text-lg font-light opacity-70">{summary}</p>
+          <p className="mt-8 text-xl font-light leading-7 opacity-70">
+            {summary}
+          </p>
           <button className="mt-4 inline-block w-full bg-secondary-orange py-3 text-2xl hover:opacity-95 lg:mt-12">
             <Link to={"/"}>Discussion</Link>
           </button>
