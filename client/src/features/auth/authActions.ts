@@ -4,8 +4,7 @@ import { authActions } from "./authSlice";
 import { defaultHeaders } from "../../util/defaultHeaders";
 import { setAuthToken } from "../../util/setAuthToken";
 import { setAlert } from "../alert/alertActions";
-import { AlertTypes } from "../alert/alertSlice";
-
+import { AlertTypes } from "../../util/alertTypes";
 // Register
 export const register =
   (user: {

@@ -3,8 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { planets } from "../../data/data";
 import { setAlert } from "../../features/alert/alertActions";
-import { AlertTypes } from "../../features/alert/alertSlice";
 import { register } from "../../features/auth/authActions";
+import { AlertTypes } from "../../util/alertTypes";
 import { validateRegistration } from "../../util/validateRegistration";
 
 const Register = () => {

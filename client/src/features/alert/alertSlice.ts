@@ -1,9 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-
-export enum AlertTypes {
-  DANGER,
-  SUCCESS,
-}
+import { AlertTypes } from "../../util/alertTypes";
 
 export interface AlertInterface {
   id: string;

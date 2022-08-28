@@ -1,5 +1,6 @@
-import { alertActions, AlertTypes } from "./alertSlice";
+import { alertActions } from "./alertSlice";
 import { Dispatch } from "@reduxjs/toolkit";
+import { AlertTypes } from "../../util/alertTypes";
 
 export const setAlert =
   (msg: string, alertType: AlertTypes, timeout: number = 6000) =>
