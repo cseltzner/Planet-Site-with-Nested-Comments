@@ -1,10 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Outlet, useOutlet } from "react-router";
+import { useAppDispatch } from "./app/hooks";
 import Navbar from "./components/layout/Navbar";
 import RandomPlanet from "./components/primary-pages/RandomPlanet";
+import { loadUser } from "./features/auth/authActions";
 
 function App() {
+  const dispatch = useAppDispatch();
   const outlet = useOutlet();
+
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      dispatch(loadUser());
+    }
+  }, []);
 
   return (
     <>

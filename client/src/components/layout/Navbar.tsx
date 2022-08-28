@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { logout } from "../../features/auth/authActions";
 import NavMenu from "./Menu";
 
 const Navbar = () => {
+  const dispatch = useAppDispatch();
+  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
   const curPlanet = useParams().planet;
   const [menuHidden, setMenuHidden] = useState(true);
 
@@ -145,20 +149,35 @@ const Navbar = () => {
           </li>
         </ul>
         <div>
-          {/* Sign in button (Med screens and above) */}
-          <Link
-            to="/login"
-            className="align-align-self-center mr-6 hidden min-w-fit text-lg text-white opacity-90 hover:opacity-100 md:inline-block lg:text-xl"
-          >
-            Sign in
-          </Link>
-          {/* Register button (Med screens and above) */}
-          <Link
-            to="/register"
-            className="align-align-self-center hidden min-w-fit text-lg text-secondary-orange  hover:opacity-90 md:inline-block lg:text-xl"
-          >
-            Register
-          </Link>
+          {/* If user is authenticated */}
+          {isAuthenticated ? (
+            <>
+              <button
+                onClick={(e) => dispatch(logout())}
+                className="mr-6 hidden self-center whitespace-nowrap text-lg text-white opacity-90 hover:opacity-100 md:inline-block lg:text-xl"
+              >
+                Log out
+              </button>
+            </>
+          ) : (
+            <>
+              {/* If user is unauthenticated */}
+              {/* Sign in button (Med screens and above) */}
+              <Link
+                to="/login"
+                className="mr-6 hidden min-w-fit self-center text-lg text-white opacity-90 hover:opacity-100 md:inline-block lg:text-xl"
+              >
+                Sign in
+              </Link>
+              {/* Register button (Med screens and above) */}
+              <Link
+                to="/register"
+                className="hidden min-w-fit self-center text-lg text-secondary-orange  hover:opacity-90 md:inline-block lg:text-xl"
+              >
+                Register
+              </Link>
+            </>
+          )}
         </div>
         {/* Hamburger button (Smaller than med screens) */}
         <div className="md:hidden" onClick={() => menuToggle()}>
