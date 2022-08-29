@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deletePost = exports.editPost = exports.getAllPosts = exports.createPost = void 0;
+exports.deletePost = exports.editPost = exports.getPost = exports.getAllPosts = exports.createPost = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const Post_1 = require("../models/Post");
 const postPopulate_1 = require("./postPopulate");
@@ -72,6 +72,22 @@ const getAllPosts = (req, res, planet) => __awaiter(void 0, void 0, void 0, func
     }
 });
 exports.getAllPosts = getAllPosts;
+// Get post
+const getPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const postId = req.params.postId;
+    try {
+        const post = yield Post_1.Post.findById(postId)
+            .sort({ date: -1 })
+            .populate(postPopulate_1.postPopulate);
+        return res.json(post);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).send("Server Error");
+        return;
+    }
+});
+exports.getPost = getPost;
 // Edit post
 const editPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _b;

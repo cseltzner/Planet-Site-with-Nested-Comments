@@ -45,6 +45,12 @@ router.post("/:planetId", // planetId: Number(1 through 9)
 router.get("/:planetId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, postController_1.getAllPosts)(req, res);
 }));
+// @route   GET api/posts/post/:postId
+// @desc    Get specific post
+// @access  Public
+router.get("/post/:postId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield (0, postController_1.getPost)(req, res);
+}));
 // @route   PUT api/posts/:postId
 // @desc    Edit post body
 // @access  Private
