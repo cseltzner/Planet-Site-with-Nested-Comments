@@ -6,6 +6,7 @@ import {
   deletePost,
   editPost,
   getAllPosts,
+  getPost,
 } from "../controllers/postController";
 import { authMiddleware } from "../middleware/auth";
 const router = Router();
@@ -45,6 +46,16 @@ router.get(
   "/:planetId",
   async (req: express.Request, res: express.Response) => {
     await getAllPosts(req, res);
+  }
+);
+
+// @route   GET api/posts/post/:postId
+// @desc    Get specific post
+// @access  Public
+router.get(
+  "/post/:postId",
+  async (req: express.Request, res: express.Response) => {
+    await getPost(req, res);
   }
 );
 

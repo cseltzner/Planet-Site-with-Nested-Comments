@@ -66,6 +66,22 @@ export const getAllPosts = async (
   }
 };
 
+// Get post
+export const getPost = async (req: express.Request, res: express.Response) => {
+  const postId = req.params.postId;
+
+  try {
+    const post = await Post.findById(postId)
+      .sort({ date: -1 })
+      .populate(postPopulate);
+    return res.json(post);
+  } catch (err) {
+    console.log(err);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Server Error");
+    return;
+  }
+};
+
 // Edit post
 export const editPost = async (req: express.Request, res: express.Response) => {
   try {
