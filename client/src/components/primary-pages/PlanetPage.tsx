@@ -1,12 +1,36 @@
-import React from "react";
-import { useParams } from "react-router";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router";
 import { Link } from "react-router-dom";
-import { planetData } from "../../data/data";
+import { planetData, planets } from "../../data/data";
 
 const PlanetPage = () => {
+  const navigate = useNavigate();
   const { planet } = useParams();
-  const { name, summary, orbit, rotation, radius, mass, temp } =
-    planetData[`${planet?.toLowerCase()}`];
+
+  const [planetsObj, setPlanetsObj] = useState({
+    name: "planet",
+    summary: "summary",
+    orbit: "orbit",
+    rotation: "rotation",
+    radius: "radius",
+    mass: "mass",
+    temp: "temp",
+  });
+
+  // If link is invalid
+  useEffect(() => {
+    if (!planets.includes(planet!)) {
+      navigate("/");
+    } else {
+      setPlanetsObj(planetData[`${planet?.toLowerCase()}`]);
+    }
+  }, [planet]);
+
+  const { name, summary, orbit, rotation, radius, mass, temp } = planetsObj;
+
+  // const { name, summary, orbit, rotation, radius, mass, temp } =
+  //   planetData[`${planet?.toLowerCase()}`];
+
   return (
     <>
       <div className="mx-auto flex flex-col items-center gap-4 pt-12 pl-12 pr-12 text-white md:flex-row md:gap-12 md:pl-4 md:pt-24 lg:max-w-7xl">
@@ -21,12 +45,15 @@ const PlanetPage = () => {
             {summary}
           </p>
           <button className="mt-4 inline-block w-full bg-secondary-orange py-3 text-2xl hover:opacity-95 lg:mt-12">
-            <Link to={"/"}>Discussion</Link>
+            <Link to={`/planets/${planet}/discussion`} className="block">
+              Discussion
+            </Link>
           </button>
           <button className="mt-6 inline-block w-full border border-white border-opacity-50 bg-transparent py-3 text-2xl transition-opacity hover:border-opacity-70">
             <a
               href={`https://en.wikipedia.org/wiki/${name}_(planet)`}
               target="_blank"
+              className="block"
             >
               More Information
             </a>
