@@ -57,7 +57,8 @@ export const getAllPosts = async (
   try {
     const posts = await Post.find({ planet: planetId })
       .sort({ date: -1 })
-      .populate(postPopulate);
+      .populate(postPopulate)
+      .populate("user", "username");
     return res.json(posts);
   } catch (err) {
     console.log(err);

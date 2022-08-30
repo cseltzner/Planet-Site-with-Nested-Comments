@@ -1,8 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-interface Post {
+export interface Post {
   _id: string;
-  user: string;
+  user: {
+    _id: string;
+    username: string;
+  };
   title: string;
   body: string;
   planet: number;

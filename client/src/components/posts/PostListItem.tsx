@@ -1,16 +1,20 @@
 import React from "react";
-import { PostInterface } from "../../features/post/postSlice";
+import { Post } from "../../features/post/postSlice";
 
 // Fix interface typing
 interface Props {
-  post: any;
+  post: Post;
 }
 
 const PostListItem = (props: Props) => {
+  const post = props.post;
+
+  const commentTotal = post.comments.flat().length;
+
   return (
     <>
-      <div className="flex flex-row gap-4 border border-white border-opacity-50 py-3 px-6">
-        <div className="flex flex-col">
+      <div className="flex min-w-[300px] max-w-3xl flex-row gap-8 border border-white border-opacity-50 py-3 px-6">
+        <div className="flex cursor-pointer flex-col">
           <div>24</div>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -27,13 +31,21 @@ const PostListItem = (props: Props) => {
             />
           </svg>
         </div>
-        <div className="flex flex-col">
-          <h2 className="text-xl tracking-wide">
-            I bet you never learned this Jupiter fact...
-          </h2>
+        <div className="flex grow flex-col">
+          <h2 className="cursor-pointer text-xl tracking-wide">{post.title}</h2>
           <div className="flex flex-row justify-between">
-            <p className="font-thin tracking-wide opacity-75">SpaceFriend24</p>
-            <p className="text-secondary-orange text-opacity-90">14 comments</p>
+            <p className="font-thin tracking-wide opacity-75">
+              {post.user.username}
+            </p>
+            <p
+              className={`cursor-pointer font-light tracking-wide ${
+                commentTotal > 0
+                  ? "text-secondary-orange opacity-100"
+                  : "opacity-75"
+              }`}
+            >
+              {commentTotal} {commentTotal === 1 ? "comment" : "comments"}
+            </p>
           </div>
         </div>
       </div>
