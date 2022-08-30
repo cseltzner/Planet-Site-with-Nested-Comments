@@ -51,6 +51,9 @@ const postSlice = createSlice({
   name: "post",
   initialState: initialState,
   reducers: {
+    setLoading: (state) => {
+      state.loading = true;
+    },
     getPosts: (state, action) => {
       state.posts = action.payload;
       state.loading = false;

@@ -1,10 +1,12 @@
 import React from "react";
 
-const Spinner = () => {
+const Spinner = (props: { size?: number }) => {
   return (
-    <div role="status" className="flex justify-center">
+    <div role="status">
       <svg
-        className="mr-2 h-7 w-7 animate-spin fill-primary-purple text-gray-200 dark:text-gray-600"
+        className={`mr-2 ${
+          !props.size ? "h-8 w-8" : `h-${props.size} w-${props.size}`
+        } animate-spin fill-blue-600 text-gray-200 dark:text-gray-600`}
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

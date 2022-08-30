@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { getPosts } from "../../features/post/postActions";
+import Spinner from "../layout/Spinner";
 import PostListItem from "./PostListItem";
 
 interface Props {
@@ -33,55 +34,64 @@ const Posts = (props: Props) => {
   }, []);
 
   return (
-    <div className="grow">
-      {posts.length > 0 ? (
-        posts.map((post) => <PostListItem key={post._id} post={post} />)
-      ) : (
-        <>
-          <p className="text-2xl">No posts yet!</p>
-        </>
+    <>
+      {loading && (
+        <div className="self-center">
+          <Spinner size={24} />
+        </div>
       )}
-      <div>
-        <button
-          onClick={() => toggleCreatingPost()}
-          className={`mt-4 inline-block ${
-            !creatingPost && "bg-secondary-orange px-24"
-          }  py-3 text-2xl hover:opacity-95 lg:mt-12`}
-        >
-          {creatingPost ? "Hide" : "Create Post"}
-        </button>
-        {/* If creatingPost is true */}
-        {creatingPost && (
-          <>
-            <div className="flex flex-col gap-2">
-              <input
-                type="text"
-                name="title"
-                placeholder="Post Title..."
-                className="bg-white bg-opacity-75 p-3 text-xl text-black placeholder:text-black placeholder:text-opacity-70"
-                value={formData.title}
-                onChange={(e) => formChangeHandler(e)}
-              />
-              <textarea
-                name="body"
-                placeholder="What are your thoughts?"
-                className="bg-white bg-opacity-75 p-3  text-xl text-black placeholder:text-black placeholder:text-opacity-70"
-                value={formData.body}
-                onChange={(e) => formChangeHandler(e)}
-              ></textarea>
-              <button
-                onClick={() => toggleCreatingPost()}
-                className="mt-4 inline-block 
+      {!loading && (
+        <div className="grow">
+          {posts.length > 0 ? (
+            posts.map((post) => <PostListItem key={post._id} post={post} />)
+          ) : (
+            <>
+              <p className="text-2xl">No posts yet!</p>
+            </>
+          )}
+          <div>
+            <button
+              onClick={() => toggleCreatingPost()}
+              className={`mt-4 inline-block ${
+                !creatingPost && "bg-secondary-orange px-24"
+              }  py-3 text-2xl hover:opacity-95 lg:mt-12`}
+            >
+              {creatingPost ? "Hide" : "Create Post"}
+            </button>
+            {/* If creatingPost is true */}
+            {creatingPost && (
+              <>
+                <div className="flex flex-col gap-2">
+                  <input
+                    type="text"
+                    name="title"
+                    placeholder="Post Title..."
+                    className="bg-white bg-opacity-75 p-3 text-xl text-black placeholder:text-black placeholder:text-opacity-70"
+                    value={formData.title}
+                    onChange={(e) => formChangeHandler(e)}
+                  />
+                  <textarea
+                    name="body"
+                    placeholder="What are your thoughts?"
+                    className="bg-white bg-opacity-75 p-3  text-xl text-black placeholder:text-black placeholder:text-opacity-70"
+                    value={formData.body}
+                    onChange={(e) => formChangeHandler(e)}
+                  ></textarea>
+                  <button
+                    onClick={() => toggleCreatingPost()}
+                    className="mt-4 inline-block 
             bg-secondary-orange px-24
             py-3 text-2xl hover:opacity-95 lg:mt-12"
-              >
-                Submit Post
-              </button>
-            </div>
-          </>
-        )}
-      </div>
-    </div>
+                  >
+                    Submit Post
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

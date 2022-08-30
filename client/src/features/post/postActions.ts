@@ -6,6 +6,7 @@ import { postActions } from "./postSlice";
 // Get posts
 export const getPosts = (planet: Planets) => async (dispatch: Dispatch) => {
   try {
+    dispatch(postActions.setLoading());
     const res = await axios.get(`/api/posts/${planet}`);
     dispatch(postActions.getPosts(res.data));
   } catch (error) {
@@ -23,6 +24,7 @@ export const getPosts = (planet: Planets) => async (dispatch: Dispatch) => {
 // Get post
 export const getPost = (postId: string) => async (dispatch: Dispatch) => {
   try {
+    dispatch(postActions.setLoading());
     const res = await axios.get(`/api/posts/post/${postId}`);
     dispatch(postActions.getPost(res.data));
   } catch (error) {
