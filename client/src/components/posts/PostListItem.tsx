@@ -1,4 +1,5 @@
 import React from "react";
+import { Link, useParams } from "react-router-dom";
 import { Post } from "../../features/post/postSlice";
 
 // Fix interface typing
@@ -7,9 +8,12 @@ interface Props {
 }
 
 const PostListItem = (props: Props) => {
+  const { planet } = useParams();
   const post = props.post;
 
   const commentTotal = post.comments.flat().length;
+
+  const urlToPost = `/planets/${planet}/discussion/${post._id}`;
 
   return (
     <>
@@ -32,20 +36,26 @@ const PostListItem = (props: Props) => {
           </svg>
         </div>
         <div className="flex grow flex-col">
-          <h2 className="cursor-pointer text-xl tracking-wide">{post.title}</h2>
+          <Link to={urlToPost}>
+            <h2 className="cursor-pointer text-xl tracking-wide hover:underline">
+              {post.title}
+            </h2>
+          </Link>
           <div className="flex flex-row justify-between">
             <p className="font-thin tracking-wide opacity-75">
               {post.user.username}
             </p>
-            <p
-              className={`cursor-pointer font-light tracking-wide ${
-                commentTotal > 0
-                  ? "text-secondary-orange opacity-100"
-                  : "opacity-75"
-              }`}
-            >
-              {commentTotal} {commentTotal === 1 ? "comment" : "comments"}
-            </p>
+            <Link to={urlToPost}>
+              <p
+                className={`cursor-pointer font-light tracking-wide hover:underline ${
+                  commentTotal > 0
+                    ? "text-secondary-orange opacity-100"
+                    : "opacity-75"
+                }`}
+              >
+                {commentTotal} {commentTotal === 1 ? "comment" : "comments"}
+              </p>
+            </Link>
           </div>
         </div>
       </div>

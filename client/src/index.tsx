@@ -12,6 +12,7 @@ import RandomPlanet from "./components/primary-pages/RandomPlanet";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import PostsPage from "./components/posts/PostsPage";
+import Post from "./components/single-post/Post";
 
 const container = document.getElementById("root")!;
 const root = createRoot(container);
@@ -24,6 +25,10 @@ root.render(
           <Route path="/" element={<App />}>
             <Route path="planets/:planet" element={<PlanetPage />} />
             <Route path="planets/:planet/discussion" element={<PostsPage />} />
+            <Route
+              path="planets/:planet/discussion/:postId"
+              element={<Post />}
+            />
             <Route path="register" element={<Register />} />
             <Route path="login" element={<Login />} />
             <Route path="*" element={<RandomPlanet />} />
