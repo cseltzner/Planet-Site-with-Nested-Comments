@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { setAlert } from "../../features/alert/alertActions";
 import { getPost } from "../../features/post/postActions";
 import { AlertTypes } from "../../util/alertTypes";
+import Spinner from "../layout/Spinner";
 import PostComments from "./PostComments";
 
 const Post = () => {
@@ -72,7 +73,19 @@ const Post = () => {
           </button>
         </div>
 
-        <PostComments />
+        {/* Comments section */}
+
+        {/* Spinner when loading */}
+        {loading && <Spinner />}
+        {/* PostComments when comments exist */}
+        {!loading && post?.comments && post?.comments.length > 0 && (
+          <PostComments comments={post!.comments} />
+        )}
+        {/* No comments template */}
+        {!loading &&
+          post?.comments &&
+          post?.comments.length < 1 &&
+          "No comments yet..."}
       </div>
     </>
   );

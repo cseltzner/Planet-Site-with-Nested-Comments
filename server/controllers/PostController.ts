@@ -58,7 +58,27 @@ export const getAllPosts = async (
     const posts = await Post.find({ planet: planetId })
       .sort({ updatedAt: -1 })
       .populate(postPopulate)
-      .populate("user", "username");
+      .populate("user", "username")
+      .populate({
+        path: "comments",
+        populate: {
+          path: "user",
+          model: "user",
+          select: "username favPlanet",
+        },
+      })
+      .populate({
+        path: "comments",
+        populate: {
+          path: "childComments",
+          model: "childcomment",
+          populate: {
+            path: "user",
+            model: "user",
+            select: "username favPlanet",
+          },
+        },
+      });
     return res.json(posts);
   } catch (err) {
     console.log(err);
@@ -74,7 +94,35 @@ export const getPost = async (req: express.Request, res: express.Response) => {
   try {
     const post = await Post.findById(postId)
       .sort({ updatedAt: -1 })
-      .populate(postPopulate);
+      .populate(postPopulate)
+      .populate({
+        path: "comments",
+        populate: {
+          path: "user",
+          model: "user",
+          select: "username favPlanet",
+        },
+      })
+      .populate({
+        path: "comments.childComments",
+        populate: {
+          path: "user",
+          model: "user",
+          select: "username favPlanet",
+        },
+      })
+      .populate({
+        path: "comments",
+        populate: {
+          path: "childComments",
+          model: "childcomment",
+          populate: {
+            path: "user",
+            model: "user",
+            select: "username favPlanet",
+          },
+        },
+      });
     return res.json(post);
   } catch (err) {
     console.log(err);

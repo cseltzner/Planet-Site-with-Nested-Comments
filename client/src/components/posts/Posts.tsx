@@ -57,7 +57,10 @@ const Posts = (props: Props) => {
             posts.map((post) => <PostListItem key={post._id} post={post} />)
           ) : (
             <>
-              <p className="text-2xl">No posts yet!</p>
+              <p className="text-2xl">
+                No posts yet! <br /> Check your internet connection and try
+                again!
+              </p>
             </>
           )}
           <div>

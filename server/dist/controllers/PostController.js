@@ -63,7 +63,27 @@ const getAllPosts = (req, res, planet) => __awaiter(void 0, void 0, void 0, func
         const posts = yield Post_1.Post.find({ planet: planetId })
             .sort({ updatedAt: -1 })
             .populate(postPopulate_1.postPopulate)
-            .populate("user", "username");
+            .populate("user", "username")
+            .populate({
+            path: "comments",
+            populate: {
+                path: "user",
+                model: "user",
+                select: "username favPlanet",
+            },
+        })
+            .populate({
+            path: "comments",
+            populate: {
+                path: "childComments",
+                model: "childcomment",
+                populate: {
+                    path: "user",
+                    model: "user",
+                    select: "username favPlanet",
+                },
+            },
+        });
         return res.json(posts);
     }
     catch (err) {
@@ -79,7 +99,35 @@ const getPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const post = yield Post_1.Post.findById(postId)
             .sort({ updatedAt: -1 })
-            .populate(postPopulate_1.postPopulate);
+            .populate(postPopulate_1.postPopulate)
+            .populate({
+            path: "comments",
+            populate: {
+                path: "user",
+                model: "user",
+                select: "username favPlanet",
+            },
+        })
+            .populate({
+            path: "comments.childComments",
+            populate: {
+                path: "user",
+                model: "user",
+                select: "username favPlanet",
+            },
+        })
+            .populate({
+            path: "comments",
+            populate: {
+                path: "childComments",
+                model: "childcomment",
+                populate: {
+                    path: "user",
+                    model: "user",
+                    select: "username favPlanet",
+                },
+            },
+        });
         return res.json(post);
     }
     catch (err) {

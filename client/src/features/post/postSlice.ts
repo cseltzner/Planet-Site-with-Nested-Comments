@@ -14,9 +14,9 @@ export interface Post {
   comments: Comment[];
 }
 
-interface Comment {
+export interface Comment {
   _id: string;
-  user: string;
+  user: User;
   body: string;
   parentPost: string;
   createdAt: Date;
@@ -24,13 +24,19 @@ interface Comment {
   childComments: ChildComment[];
 }
 
-interface ChildComment {
+export interface ChildComment {
   _id: string;
-  user: string;
+  user: User;
   body: string;
   parentComment: string;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface User {
+  _id: string;
+  username: string;
+  favPlanet: number;
 }
 
 export interface PostInterface {
