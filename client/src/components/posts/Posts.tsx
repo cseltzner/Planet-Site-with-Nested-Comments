@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { getPosts } from "../../features/post/postActions";
+import { addPost, getPosts } from "../../features/post/postActions";
 import Spinner from "../layout/Spinner";
 import PostListItem from "./PostListItem";
 
@@ -9,12 +10,18 @@ interface Props {
 }
 
 const Posts = (props: Props) => {
+  const navigate = useNavigate();
+  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
   const { posts, post, loading, error } = useAppSelector((state) => state.post);
   const dispatch = useAppDispatch();
   const [creatingPost, setCreatingPost] = useState(false);
   const [formData, setFormData] = useState({ title: "", body: "" });
 
   const toggleCreatingPost = () => {
+    if (!isAuthenticated) {
+      navigate("/login");
+      return;
+    }
     setCreatingPost((prevState) => !prevState);
   };
 
@@ -29,6 +36,10 @@ const Posts = (props: Props) => {
     });
   };
 
+  const postSubmitHandler = () => {
+    dispatch(addPost(formData.title, formData.body, props.planetId));
+  };
+
   useEffect(() => {
     dispatch(getPosts(props.planetId));
   }, []);
@@ -37,7 +48,7 @@ const Posts = (props: Props) => {
     <>
       {loading && (
         <div className="self-center">
-          <Spinner size={24} />
+          <Spinner tailwindSize={"w-24 h-24"} />
         </div>
       )}
       {!loading && (
@@ -78,7 +89,7 @@ const Posts = (props: Props) => {
                     onChange={(e) => formChangeHandler(e)}
                   ></textarea>
                   <button
-                    onClick={() => toggleCreatingPost()}
+                    onClick={() => postSubmitHandler()}
                     className="mt-4 inline-block 
             bg-secondary-orange px-24
             py-3 text-2xl hover:opacity-95 lg:mt-12"

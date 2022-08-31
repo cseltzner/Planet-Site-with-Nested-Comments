@@ -61,7 +61,7 @@ const getAllPosts = (req, res, planet) => __awaiter(void 0, void 0, void 0, func
     }
     try {
         const posts = yield Post_1.Post.find({ planet: planetId })
-            .sort({ date: -1 })
+            .sort({ updatedAt: -1 })
             .populate(postPopulate_1.postPopulate)
             .populate("user", "username");
         return res.json(posts);
@@ -78,7 +78,7 @@ const getPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const postId = req.params.postId;
     try {
         const post = yield Post_1.Post.findById(postId)
-            .sort({ date: -1 })
+            .sort({ updatedAt: -1 })
             .populate(postPopulate_1.postPopulate);
         return res.json(post);
     }

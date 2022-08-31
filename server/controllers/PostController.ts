@@ -56,7 +56,7 @@ export const getAllPosts = async (
   }
   try {
     const posts = await Post.find({ planet: planetId })
-      .sort({ date: -1 })
+      .sort({ updatedAt: -1 })
       .populate(postPopulate)
       .populate("user", "username");
     return res.json(posts);
@@ -73,7 +73,7 @@ export const getPost = async (req: express.Request, res: express.Response) => {
 
   try {
     const post = await Post.findById(postId)
-      .sort({ date: -1 })
+      .sort({ updatedAt: -1 })
       .populate(postPopulate);
     return res.json(post);
   } catch (err) {

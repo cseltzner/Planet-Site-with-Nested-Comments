@@ -1,11 +1,11 @@
 import React from "react";
 
-const Spinner = (props: { size?: number }) => {
+const Spinner = (props: { tailwindSize?: string }) => {
   return (
     <div role="status">
       <svg
         className={`mr-2 ${
-          !props.size ? "h-8 w-8" : `h-${props.size} w-${props.size}`
+          props.tailwindSize ? props.tailwindSize : "h-8 w-8"
         } animate-spin fill-blue-600 text-gray-200 dark:text-gray-600`}
         viewBox="0 0 100 101"
         fill="none"

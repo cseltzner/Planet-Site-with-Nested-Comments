@@ -51,6 +51,9 @@ const postSlice = createSlice({
   name: "post",
   initialState: initialState,
   reducers: {
+    reset: () => {
+      return initialState;
+    },
     setLoading: (state) => {
       state.loading = true;
     },
@@ -76,7 +79,6 @@ const postSlice = createSlice({
     },
     addPost: (state, action) => {
       state.posts = [action.payload, ...state.posts];
-      state.loading = false;
     },
     getPost: (state, action) => {
       state.post = action.payload;
