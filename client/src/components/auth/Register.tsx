@@ -45,7 +45,7 @@ const Register = () => {
       username: formData.username,
       email: formData.email,
       password: formData.password,
-      planetSelected: planetSelected,
+      favPlanet: planetSelected && planetSelected + 1,
     };
     dispatch(register(registerArgs));
   };

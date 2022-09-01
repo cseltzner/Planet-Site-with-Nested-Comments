@@ -12,7 +12,7 @@ export const register =
     username: string;
     email: string;
     password: string;
-    favPlanet?: number;
+    favPlanet: number | null;
   }) =>
   async (dispatch: Dispatch<any>) => {
     const { username, email, password, favPlanet } = user;
@@ -31,6 +31,7 @@ export const register =
       dispatch(
         setAlert("Your account has been registered", AlertTypes.SUCCESS)
       );
+      dispatch(loadUser());
     } catch (error) {
       if (error instanceof AxiosError) {
         const errors = error?.response?.data.errors as { msg: string }[];

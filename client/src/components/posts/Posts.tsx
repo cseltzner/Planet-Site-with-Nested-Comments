@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { setAlert } from "../../features/alert/alertActions";
 import { addPost, getPosts } from "../../features/post/postActions";
+import { AlertTypes } from "../../util/alertTypes";
 import Spinner from "../layout/Spinner";
 import PostListItem from "./PostListItem";
 
@@ -21,6 +23,7 @@ const Posts = (props: Props) => {
 
   const toggleCreatingPost = () => {
     if (!isAuthenticated) {
+      dispatch(setAlert("You must be logged in to post", AlertTypes.DANGER));
       navigate("/login");
       return;
     }

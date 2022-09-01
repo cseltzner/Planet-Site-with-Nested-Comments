@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { setAlert } from "../../features/alert/alertActions";
 import { addComment, getPost } from "../../features/post/postActions";
@@ -9,6 +9,8 @@ import PostComments from "./PostComments";
 
 const Post = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
   const { loading, post, error } = useAppSelector((state) => state.post);
   const { planet, postId } = useParams();
 
@@ -29,6 +31,15 @@ const Post = () => {
   };
 
   const submitCommentHandler = () => {
+    if (!isAuthenticated) {
+      dispatch(setAlert("You must be logged in to comment", AlertTypes.DANGER));
+      navigate("/login");
+      return;
+    }
+    if (!postText) {
+      dispatch(setAlert("Post body cannot be empty", AlertTypes.DANGER));
+      return;
+    }
     dispatch(addComment(post?._id!, postText));
     setPostText("");
   };

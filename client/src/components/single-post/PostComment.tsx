@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
-import { useAppDispatch } from "../../app/hooks";
+import { useNavigate, useParams } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { planets } from "../../data/data";
 import { setAlert } from "../../features/alert/alertActions";
 import { addReply } from "../../features/post/postActions";
@@ -15,12 +15,19 @@ interface Props {
 
 const PostComment = (props: Props) => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
   const { postId } = useParams();
   const [replyActive, setReplyActive] = useState(false);
   const [replyText, setReplyText] = useState("");
   const favPlanet = planets[props.comment.user.favPlanet - 1];
 
   const replyToggle = () => {
+    if (!isAuthenticated) {
+      dispatch(setAlert("You must be logged in to comment", AlertTypes.DANGER));
+      navigate("/login");
+      return;
+    }
     setReplyActive((prevState) => !prevState);
   };
 
@@ -36,6 +43,11 @@ const PostComment = (props: Props) => {
   };
 
   const replyHandler = () => {
+    if (!isAuthenticated) {
+      dispatch(setAlert("You must be logged in to comment", AlertTypes.DANGER));
+      navigate("/login");
+      return;
+    }
     dispatch(addReply(postId!, props.comment._id, replyText));
   };
 
@@ -64,9 +76,9 @@ const PostComment = (props: Props) => {
             </div>
           </div>
           <div className="flex w-full flex-col justify-between gap-2 text-lg">
-            <p>{props.comment.body}</p>
+            <p className="text-xl">{props.comment.body}</p>
             <div className="mt-2 mr-4 flex justify-end gap-16">
-              <p className="self-end text-sm opacity-80">{dateString}</p>
+              <p className="self-end text-sm opacity-70">{dateString}</p>
               <button
                 className="font-light opacity-60"
                 onClick={() => reportHandler()}
