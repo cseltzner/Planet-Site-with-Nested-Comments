@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { setAlert } from "../../features/alert/alertActions";
 import { logout } from "../../features/auth/authActions";
+import { AlertTypes } from "../../util/alertTypes";
 import NavMenu from "./Menu";
 
 const Navbar = () => {
@@ -13,6 +15,7 @@ const Navbar = () => {
 
   const logoutHandler = () => {
     dispatch(logout());
+    dispatch(setAlert("You are now logged out", AlertTypes.SUCCESS));
     navigate("/");
   };
 
