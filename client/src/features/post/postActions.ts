@@ -78,3 +78,68 @@ export const addPost =
       );
     }
   };
+
+// Add Comment
+export const addComment =
+  (postId: string, body: string) => async (dispatch: Dispatch<any>) => {
+    try {
+      dispatch(postActions.setLoading());
+
+      const res = await axios.post(
+        `/api/posts/comments/${postId}`,
+        { body },
+        defaultHeaders
+      );
+      dispatch(setAlert("Comment created", AlertTypes.SUCCESS));
+      dispatch(getPost(postId));
+    } catch (error) {
+      const err = error as AxiosError;
+
+      dispatch(
+        setAlert(
+          "Failed to create post. Reason: " + err.response!.statusText,
+          AlertTypes.DANGER
+        )
+      );
+
+      dispatch(
+        postActions.postError({
+          msg: err.response!.statusText,
+          status: err.response!.status,
+        })
+      );
+    }
+  };
+
+// Reply to comment
+export const addReply =
+  (postId: string, commentId: string, body: string) =>
+  async (dispatch: Dispatch<any>) => {
+    try {
+      dispatch(postActions.setLoading());
+
+      const res = await axios.post(
+        `/api/posts/comments/reply/${postId}/${commentId}`,
+        { body },
+        defaultHeaders
+      );
+      dispatch(setAlert("Reply created", AlertTypes.SUCCESS));
+      dispatch(getPost(postId));
+    } catch (error) {
+      const err = error as AxiosError;
+
+      dispatch(
+        setAlert(
+          "Failed to reply. Reason: " + err.response!.statusText,
+          AlertTypes.DANGER
+        )
+      );
+
+      dispatch(
+        postActions.postError({
+          msg: err.response!.statusText,
+          status: err.response!.status,
+        })
+      );
+    }
+  };

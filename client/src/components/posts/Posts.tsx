@@ -15,7 +15,9 @@ const Posts = (props: Props) => {
   const { posts, post, loading, error } = useAppSelector((state) => state.post);
   const dispatch = useAppDispatch();
   const [creatingPost, setCreatingPost] = useState(false);
-  const [formData, setFormData] = useState({ title: "", body: "" });
+
+  const initialFormState = { title: "", body: "" };
+  const [formData, setFormData] = useState(initialFormState);
 
   const toggleCreatingPost = () => {
     if (!isAuthenticated) {
@@ -38,6 +40,8 @@ const Posts = (props: Props) => {
 
   const postSubmitHandler = () => {
     dispatch(addPost(formData.title, formData.body, props.planetId));
+    setFormData(initialFormState);
+    setCreatingPost(false);
   };
 
   useEffect(() => {
@@ -57,10 +61,13 @@ const Posts = (props: Props) => {
             posts.map((post) => <PostListItem key={post._id} post={post} />)
           ) : (
             <>
-              <p className="text-2xl">
-                No posts yet! <br /> Check your internet connection and try
-                again!
-              </p>
+              <p className="text-2xl">No posts found!</p>
+              <button
+                className="py-2 text-xl text-secondary-orange"
+                onClick={() => navigate(0)}
+              >
+                Refresh
+              </button>
             </>
           )}
           <div>

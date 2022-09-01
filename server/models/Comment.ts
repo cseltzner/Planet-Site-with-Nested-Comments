@@ -10,30 +10,35 @@ export interface CommentInterface extends mongoose.Document {
   childComments?: ChildCommentInterface["_id"][];
 }
 
-const CommentSchema = new mongoose.Schema({
-  user: {
-    type: Schema.Types.ObjectId,
-    ref: "user",
-    required: true,
-  },
-  parentPost: {
-    type: Schema.Types.ObjectId,
-    ref: "post",
-    required: true,
-  },
-  body: {
-    type: String,
-    required: true,
-    minlength: 1,
-    maxlength: 3000,
-  },
-  childComments: [
-    {
+const CommentSchema = new mongoose.Schema(
+  {
+    user: {
       type: Schema.Types.ObjectId,
-      ref: "childcomment",
+      ref: "user",
+      required: true,
     },
-  ],
-});
+    parentPost: {
+      type: Schema.Types.ObjectId,
+      ref: "post",
+      required: true,
+    },
+    body: {
+      type: String,
+      required: true,
+      minlength: 1,
+      maxlength: 3000,
+    },
+    childComments: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "childcomment",
+      },
+    ],
+  },
+  {
+    timestamps: true,
+  }
+);
 
 export const Comment = mongoose.model<CommentInterface>(
   "comment",

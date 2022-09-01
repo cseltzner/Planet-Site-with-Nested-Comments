@@ -17,7 +17,7 @@ const PostListItem = (props: Props) => {
 
   return (
     <>
-      <div className="flex min-w-[300px] max-w-3xl flex-row gap-8 border border-white border-opacity-50 py-3 px-6">
+      <div className="flex min-w-[300px] max-w-3xl border-collapse flex-row gap-8 border border-white border-opacity-50 py-3 px-6">
         <div className="flex cursor-pointer flex-col">
           <div>24</div>
           <svg

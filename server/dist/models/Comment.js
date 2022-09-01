@@ -48,5 +48,7 @@ const CommentSchema = new mongoose_1.default.Schema({
             ref: "childcomment",
         },
     ],
+}, {
+    timestamps: true,
 });
 exports.Comment = mongoose_1.default.model("comment", CommentSchema);

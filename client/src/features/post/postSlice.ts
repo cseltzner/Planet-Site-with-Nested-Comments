@@ -9,8 +9,8 @@ export interface Post {
   title: string;
   body: string;
   planet: number;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
   comments: Comment[];
 }
 
@@ -19,8 +19,8 @@ export interface Comment {
   user: User;
   body: string;
   parentPost: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
   childComments: ChildComment[];
 }
 
@@ -29,8 +29,8 @@ export interface ChildComment {
   user: User;
   body: string;
   parentComment: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface User {
@@ -91,9 +91,7 @@ const postSlice = createSlice({
       state.loading = false;
     },
     addComment: (state, action) => {
-      if (state.post !== null) {
-        state.post.comments = [action.payload, ...state.post.comments];
-      }
+      state.post = action.payload;
       state.loading = false;
     },
     removeComment: (state, action) => {
