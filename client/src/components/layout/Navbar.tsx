@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { logout } from "../../features/auth/authActions";
 import NavMenu from "./Menu";
 
 const Navbar = () => {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
   const curPlanet = useParams().planet;
   const [menuHidden, setMenuHidden] = useState(true);
+
+  const logoutHandler = () => {
+    dispatch(logout());
+    navigate("/");
+  };
 
   // Hide hamburger menu when screen is larger than md breakpoint
   useEffect(() => {
@@ -153,7 +159,7 @@ const Navbar = () => {
           {isAuthenticated ? (
             <>
               <button
-                onClick={(e) => dispatch(logout())}
+                onClick={(e) => logoutHandler()}
                 className="mr-6 hidden self-center whitespace-nowrap text-lg text-white opacity-90 hover:opacity-100 md:inline-block lg:text-xl"
               >
                 Log out

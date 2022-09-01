@@ -68,7 +68,7 @@ const Login = () => {
           </p>
           <button
             onClick={(e) => loginSubmit(e)}
-            className="mt-8 inline-block w-full bg-secondary-orange py-2 text-xl text-white hover:opacity-95 sm:text-2xl"
+            className="mt-8 flex w-full items-center justify-center bg-secondary-orange py-2 text-xl text-white hover:opacity-95 sm:text-2xl"
           >
             {isLoading ? <Spinner /> : "Sign in"}
           </button>
