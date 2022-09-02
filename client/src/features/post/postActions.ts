@@ -79,6 +79,38 @@ export const addPost =
     }
   };
 
+// Update Post
+export const updatePost =
+  (postId: string, body: string) => async (dispatch: Dispatch<any>) => {
+    try {
+      dispatch(postActions.setLoading());
+      const data = {
+        body: body,
+      };
+
+      const res = await axios.put(`/api/posts/${postId}`, data, defaultHeaders);
+      dispatch(postActions.updatePost);
+      dispatch(setAlert("Post updated", AlertTypes.SUCCESS));
+      dispatch(getPost(postId));
+    } catch (error) {
+      const err = error as AxiosError;
+
+      dispatch(
+        setAlert(
+          "Failed to create post. Reason: " + err.response!.statusText,
+          AlertTypes.DANGER
+        )
+      );
+
+      dispatch(
+        postActions.postError({
+          msg: err.response!.statusText,
+          status: err.response!.status,
+        })
+      );
+    }
+  };
+
 // Delete Post
 export const deletePost =
   (postId: string, planetId: number) => async (dispatch: Dispatch<any>) => {

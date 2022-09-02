@@ -6,6 +6,7 @@ import {
   addComment,
   deletePost,
   getPost,
+  updatePost,
 } from "../../features/post/postActions";
 import { AlertTypes } from "../../util/alertTypes";
 import Spinner from "../layout/Spinner";
@@ -23,12 +24,19 @@ const Post = () => {
   const planetId = planets.indexOf(planet!) + 1;
 
   const [postText, setPostText] = useState("");
+  const [editPostText, setEditPostText] = useState(post?.body);
+  const [isEdit, setIsEdit] = useState(false);
 
   const isOwner = isAuthenticated && user?._id === post?.user._id;
 
   useEffect(() => {
     dispatch(getPost(postId!));
   }, []);
+
+  // Correctly sets editPostText again once post is successfully updated
+  useEffect(() => {
+    setEditPostText(post?.body);
+  }, [post?.body]);
 
   useEffect(() => {
     if (error.msg) {
@@ -40,18 +48,48 @@ const Post = () => {
     setPostText(e.target.value);
   };
 
+  const editPostTextChangeHandler = (
+    e: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    setEditPostText(e.target.value);
+  };
+
   const submitCommentHandler = () => {
     if (!isAuthenticated) {
       dispatch(setAlert("You must be logged in to comment", AlertTypes.DANGER));
       navigate("/login");
       return;
     }
-    if (!postText) {
-      dispatch(setAlert("Post body cannot be empty", AlertTypes.DANGER));
-      return;
+    // Post mode
+    if (!isEdit) {
+      if (!postText) {
+        dispatch(setAlert("Post body cannot be empty", AlertTypes.DANGER));
+        return;
+      }
+      dispatch(addComment(post?._id!, postText));
+      setPostText("");
+      setEditPostText(post?.body);
     }
-    dispatch(addComment(post?._id!, postText));
+    // Edit mode
+    else {
+      if (!editPostText) {
+        dispatch(setAlert("Post body cannot be empty", AlertTypes.DANGER));
+        return;
+      }
+      dispatch(updatePost(post?._id!, editPostText));
+      setPostText("");
+      setIsEdit(false);
+    }
+  };
+
+  const onEditClicked = () => {
+    setIsEdit(true);
     setPostText("");
+  };
+
+  const onEditCancel = () => {
+    setIsEdit(false);
+    setEditPostText(post?.body);
   };
 
   const onDeleteClicked = () => {
@@ -90,15 +128,55 @@ const Post = () => {
               <p className="mt-8 text-xl font-light leading-7 tracking-wide opacity-90">
                 {post?.body}
               </p>
-              {/* Delete button */}
               {isOwner && (
-                <div className="self-end" onClick={() => onDeleteClicked()}>
+                <div className="flex items-center gap-2 self-end">
+                  {!isEdit ? (
+                    <>
+                      {/* Edit button */}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        onClick={() => onEditClicked()}
+                        className="mt-2 h-10 w-10 cursor-pointer p-2 text-secondary-orange hover:rounded-full hover:bg-gray-900 hover:bg-opacity-50"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"
+                        />
+                      </svg>
+                    </>
+                  ) : (
+                    <>
+                      {/* Cancel edit button */}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        onClick={() => onEditCancel()}
+                        className="mt-2 h-10 w-10 cursor-pointer p-2 text-secondary-orange hover:rounded-full hover:bg-gray-900 hover:bg-opacity-50"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </>
+                  )}
+                  {/* Delete button */}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
                     strokeWidth={1.5}
                     stroke="currentColor"
+                    onClick={() => onDeleteClicked()}
                     className="mt-2 h-10 w-10 cursor-pointer rounded-full p-2 text-secondary-orange hover:bg-gray-900 hover:bg-opacity-50"
                   >
                     <path
@@ -114,19 +192,25 @@ const Post = () => {
             <Spinner />
           )}
         </div>
-        <div className="mt-8 flex flex-col items-center md:items-end">
+        <div className={`mt-8 flex flex-col items-center md:items-end`}>
           <textarea
             name="comment"
-            placeholder="What are your thoughts?"
-            value={postText}
-            onChange={(e) => postTextChangeHandler(e)}
-            className="w-full p-4 text-lg text-black opacity-80 placeholder:text-black placeholder:text-opacity-75"
+            placeholder={isEdit ? "" : "What are your thoughts?"}
+            value={isEdit ? editPostText : postText}
+            onChange={
+              isEdit
+                ? (e) => editPostTextChangeHandler(e)
+                : (e) => postTextChangeHandler(e)
+            }
+            className={`${
+              isEdit && "min-h-[400px]"
+            } w-full p-4 text-lg text-black opacity-80 placeholder:text-black placeholder:text-opacity-75`}
           ></textarea>
           <button
             className="mt-4 w-full border border-white border-opacity-50 px-8 py-3 text-2xl hover:bg-white hover:bg-opacity-50 hover:text-primary-purple md:w-fit"
             onClick={() => submitCommentHandler()}
           >
-            Submit
+            {isEdit ? "Update post" : "Submit"}
           </button>
         </div>
 
