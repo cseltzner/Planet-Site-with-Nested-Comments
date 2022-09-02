@@ -93,12 +93,7 @@ const postSlice = createSlice({
       state.post = action.payload;
       state.loading = false;
     },
-    removeComment: (state, action) => {
-      if (state.post !== null) {
-        state.post.comments = state.post.comments.filter(
-          (comment) => comment._id !== action.payload
-        );
-      }
+    deleteComment: (state) => {
       state.loading = false;
     },
     addReply: (state, action) => {

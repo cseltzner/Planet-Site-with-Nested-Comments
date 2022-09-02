@@ -90,6 +90,7 @@ const Post = () => {
               <p className="mt-8 text-xl font-light leading-7 tracking-wide opacity-90">
                 {post?.body}
               </p>
+              {/* Delete button */}
               {isOwner && (
                 <div className="self-end" onClick={() => onDeleteClicked()}>
                   <svg
