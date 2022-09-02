@@ -1,6 +1,11 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { planets } from "../../data/data";
+import { setAlert } from "../../features/alert/alertActions";
+import { logout } from "../../features/auth/authActions";
+import { AlertTypes } from "../../util/alertTypes";
 
 interface Props {
   isHidden: boolean;
@@ -9,9 +14,19 @@ interface Props {
 
 const NavMenu = (props: Props) => {
   const { isHidden, closeMenu } = props;
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
 
   const closeMenuClicked = () => {
     closeMenu();
+  };
+
+  const logoutHandler = () => {
+    dispatch(logout());
+    dispatch(setAlert("You are now logged out", AlertTypes.SUCCESS));
+    navigate("/");
+    closeMenuClicked();
   };
 
   return (
@@ -38,26 +53,39 @@ const NavMenu = (props: Props) => {
             </li>
           );
         })}
-        {/* Sign in button */}
-        <li className="border border-white border-opacity-50 py-3 text-2xl">
-          <Link
-            className="text-secondary-orange opacity-90"
-            to={`/login`}
-            onClick={() => closeMenuClicked()}
-          >
-            Sign in
-          </Link>
-        </li>
-        {/* Register button */}
-        <li className="border border-white border-opacity-50 py-3 text-2xl">
-          <Link
-            className="text-secondary-orange opacity-90"
-            to={`/register`}
-            onClick={() => closeMenuClicked()}
-          >
-            Register
-          </Link>
-        </li>
+        {/* Sign in and register only appear when not authenticated */}
+        {!isAuthenticated ? (
+          <>
+            {" "}
+            {/* Sign in button */}
+            <li className="border border-white border-opacity-50 py-3 text-2xl">
+              <Link
+                className="text-secondary-orange opacity-90"
+                to={`/login`}
+                onClick={() => closeMenuClicked()}
+              >
+                Sign in
+              </Link>
+            </li>
+            {/* Register button */}
+            <li className="border border-white border-opacity-50 py-3 text-2xl">
+              <Link
+                className="text-secondary-orange opacity-90"
+                to={`/register`}
+                onClick={() => closeMenuClicked()}
+              >
+                Register
+              </Link>
+            </li>
+          </>
+        ) : (
+          // Sign out button
+          <li className="border border-white border-opacity-50 py-3 text-2xl text-secondary-orange text-opacity-90">
+            <button className="" onClick={() => logoutHandler()}>
+              Log out
+            </button>
+          </li>
+        )}
       </ul>
       <svg
         onClick={() => closeMenuClicked()}

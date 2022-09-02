@@ -131,7 +131,7 @@ const getPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             .populate({
             path: "user",
             model: "user",
-            select: "_id username",
+            select: "username",
         });
         return res.json(post);
     }

@@ -45,15 +45,17 @@ const Post = () => {
     setPostText("");
   };
 
+  console.log(post?.createdAt);
   const date = new Date(post?.createdAt!);
-  const dateString = dateFormat(date, " m/d/yy 'at' h:MMtt");
-
+  const dateString = post && dateFormat(date, "m/d/yy 'at' h:MMtt");
   return (
     <>
-      <div className="flex flex-col p-2 text-white sm:p-12 lg:px-24">
+      <div className="flex flex-col p-4 text-white sm:p-12 lg:px-24">
         <div className="flex flex-col items-center gap-8 md:flex-row md:gap-24">
           <div className="flex flex-col items-center self-start">
-            <h1 className="text-7xl opacity-90 lg:text-8xl">{planet}</h1>
+            <h1 className="text-2xl underline opacity-90 md:text-7xl md:no-underline lg:text-8xl">
+              {planet}
+            </h1>
             <div>
               <img
                 src={`/img/planets/${planet}.svg`}
@@ -62,18 +64,23 @@ const Post = () => {
               />
             </div>
           </div>
-          <div className="flex flex-col">
-            <h2 className="text-5xl tracking-tight opacity-95">
-              {post?.title}
-            </h2>
-            <h3 className="mt-2 text-white opacity-70">
-              By <span className="underline">{post?.user.username}</span> on{" "}
-              {dateString}
-            </h3>
-            <p className="mt-8 text-xl font-light leading-7 tracking-wide opacity-90">
-              {post?.body}
-            </p>
-          </div>
+          {post ? (
+            <div className="flex flex-col">
+              <h2 className="text-5xl tracking-tight opacity-95">
+                {post?.title}
+              </h2>
+              <h3 className="mt-2 text-white opacity-70">
+                By <span className="underline">{post?.user.username}</span> on{" "}
+                {dateString}
+              </h3>
+
+              <p className="mt-8 text-xl font-light leading-7 tracking-wide opacity-90">
+                {post?.body}
+              </p>
+            </div>
+          ) : (
+            <Spinner />
+          )}
         </div>
         <div className="mt-8 flex flex-col items-center md:items-end">
           <textarea
@@ -91,10 +98,15 @@ const Post = () => {
           </button>
         </div>
 
+        <div className="mt-4"></div>
         {/* Comments section */}
 
         {/* Spinner when loading */}
-        {loading && <Spinner />}
+        {loading && (
+          <div className="mt-8 self-center">
+            <Spinner />
+          </div>
+        )}
         {/* PostComments when comments exist */}
         {!loading && post?.comments && post?.comments.length > 0 && (
           <PostComments comments={post!.comments} />
