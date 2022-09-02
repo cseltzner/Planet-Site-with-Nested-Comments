@@ -1,8 +1,12 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-import { defaultHeaders } from "../../util/defaultHeaders";
+import { createSlice } from "@reduxjs/toolkit";
+import { User } from "../post/postSlice";
 
-const initialState = {
+const initialState: {
+  token: string | null;
+  isAuthenticated: boolean;
+  loading: boolean;
+  user: User | null;
+} = {
   token: localStorage.getItem("token"),
   isAuthenticated: false,
   loading: false,

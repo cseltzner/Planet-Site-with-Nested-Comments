@@ -79,6 +79,34 @@ export const addPost =
     }
   };
 
+// Delete Post
+export const deletePost =
+  (postId: string, planetId: number) => async (dispatch: Dispatch<any>) => {
+    try {
+      dispatch(postActions.setLoading());
+      const res = await axios.delete(`/api/posts/${postId}`);
+      dispatch(postActions.deletePost(res.data));
+      dispatch(setAlert("Post deleted", AlertTypes.SUCCESS));
+      dispatch(getPosts(planetId));
+    } catch (error) {
+      const err = error as AxiosError;
+
+      dispatch(
+        setAlert(
+          "Failed to delete post. Reason: " + err.response!.statusText,
+          AlertTypes.DANGER
+        )
+      );
+
+      dispatch(
+        postActions.postError({
+          msg: err.response!.statusText,
+          status: err.response!.status,
+        })
+      );
+    }
+  };
+
 // Add Comment
 export const addComment =
   (postId: string, body: string) => async (dispatch: Dispatch<any>) => {

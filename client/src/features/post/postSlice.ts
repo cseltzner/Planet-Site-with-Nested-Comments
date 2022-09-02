@@ -80,7 +80,6 @@ const postSlice = createSlice({
       state.loading = false;
     },
     deletePost: (state, action) => {
-      state.posts = state.posts.filter((post) => post._id !== action.payload);
       state.loading = false;
     },
     addPost: (state, action) => {
