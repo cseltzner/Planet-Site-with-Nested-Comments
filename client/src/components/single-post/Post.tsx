@@ -6,6 +6,7 @@ import { addComment, getPost } from "../../features/post/postActions";
 import { AlertTypes } from "../../util/alertTypes";
 import Spinner from "../layout/Spinner";
 import PostComments from "./PostComments";
+import dateFormat from "dateformat";
 
 const Post = () => {
   const dispatch = useAppDispatch();
@@ -44,6 +45,9 @@ const Post = () => {
     setPostText("");
   };
 
+  const date = new Date(post?.createdAt!);
+  const dateString = dateFormat(date, " m/d/yy 'at' h:MMtt");
+
   return (
     <>
       <div className="flex flex-col p-2 text-white sm:p-12 lg:px-24">
@@ -58,11 +62,15 @@ const Post = () => {
               />
             </div>
           </div>
-          <div className="flex flex-col gap-8">
+          <div className="flex flex-col">
             <h2 className="text-5xl tracking-tight opacity-95">
               {post?.title}
             </h2>
-            <p className="text-xl font-light leading-7 tracking-wide opacity-90">
+            <h3 className="mt-2 text-white opacity-70">
+              By <span className="underline">{post?.user.username}</span> on{" "}
+              {dateString}
+            </h3>
+            <p className="mt-8 text-xl font-light leading-7 tracking-wide opacity-90">
               {post?.body}
             </p>
           </div>

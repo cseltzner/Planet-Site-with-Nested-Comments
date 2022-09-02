@@ -127,6 +127,11 @@ const getPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                     select: "username favPlanet",
                 },
             },
+        })
+            .populate({
+            path: "user",
+            model: "user",
+            select: "_id username",
         });
         return res.json(post);
     }

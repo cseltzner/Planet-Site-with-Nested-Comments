@@ -122,6 +122,11 @@ export const getPost = async (req: express.Request, res: express.Response) => {
             select: "username favPlanet",
           },
         },
+      })
+      .populate({
+        path: "user",
+        model: "user",
+        select: "username",
       });
     return res.json(post);
   } catch (err) {
