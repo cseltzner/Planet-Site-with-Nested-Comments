@@ -13,7 +13,6 @@ const PostComments = (props: Props) => {
       {props.comments.map((comment) => {
         return (
           <>
-            {console.log("PostComments map called")}
             <PostComment key={comment._id} comment={comment} />
           </>
         );

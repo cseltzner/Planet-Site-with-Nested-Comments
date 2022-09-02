@@ -45,7 +45,6 @@ const Post = () => {
     setPostText("");
   };
 
-  console.log(post?.createdAt);
   const date = new Date(post?.createdAt!);
   const dateString = post && dateFormat(date, "m/d/yy 'at' h:MMtt");
   return (
