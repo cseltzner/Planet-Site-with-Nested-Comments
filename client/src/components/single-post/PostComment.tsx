@@ -88,7 +88,9 @@ const PostComment = (props: Props) => {
           <div className="flex w-full flex-col justify-between gap-2 text-lg">
             <p className="text-xl">{props.comment.body}</p>
             <div className="mt-2 mr-4 flex justify-end gap-16">
-              <p className="self-end text-sm opacity-70">{dateString}</p>
+              <p className="hidden self-end text-sm opacity-70 md:block">
+                {dateString}
+              </p>
               {/* Delete button */}
               {isOwner && (
                 <div className="self-end" onClick={() => onDeleteClicked()}>
