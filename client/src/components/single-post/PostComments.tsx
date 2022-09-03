@@ -11,11 +11,7 @@ const PostComments = (props: Props) => {
     <div className="mt-8">
       <h3 className="text-2xl text-opacity-90">Comments</h3>
       {props.comments.map((comment) => {
-        return (
-          <>
-            <PostComment key={comment._id} comment={comment} />
-          </>
-        );
+        return <PostComment key={comment._id} comment={comment} />;
       })}
     </div>
   );

@@ -241,11 +241,7 @@ const PostComment = (props: Props) => {
           </div>
         )}
         {props.comment.childComments.map((comment) => {
-          return (
-            <>
-              <CommentReply reply={comment} />
-            </>
-          );
+          return <CommentReply key={comment._id} reply={comment} />;
         })}
       </div>
     </>
