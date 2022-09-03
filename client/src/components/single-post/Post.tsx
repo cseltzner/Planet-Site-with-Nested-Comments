@@ -13,6 +13,7 @@ import Spinner from "../layout/Spinner";
 import PostComments from "./PostComments";
 import dateFormat from "dateformat";
 import { planets } from "../../data/data";
+import DeleteModal from "../modals/DeleteModal";
 
 const Post = () => {
   const dispatch = useAppDispatch();
@@ -26,6 +27,7 @@ const Post = () => {
   const [postText, setPostText] = useState("");
   const [editPostText, setEditPostText] = useState(post?.body);
   const [isEdit, setIsEdit] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   const isOwner = isAuthenticated && user?._id === post?.user._id;
 
@@ -94,6 +96,7 @@ const Post = () => {
 
   const onDeleteClicked = () => {
     dispatch(deletePost(postId!, planetId));
+    setDeleteModalOpen(false);
     navigate(`/planets/${planet}/discussion`);
   };
 
@@ -180,7 +183,7 @@ const Post = () => {
                     viewBox="0 0 24 24"
                     strokeWidth={1.5}
                     stroke="currentColor"
-                    onClick={() => onDeleteClicked()}
+                    onClick={() => setDeleteModalOpen(true)}
                     className="mt-2 h-10 w-10 cursor-pointer rounded-full p-2 text-secondary-orange hover:bg-gray-900 hover:bg-opacity-50"
                   >
                     <path
@@ -237,6 +240,13 @@ const Post = () => {
           post?.comments.length < 1 &&
           "No comments yet..."}
       </div>
+      <DeleteModal
+        onConfirm={() => onDeleteClicked()}
+        onCancel={() => setDeleteModalOpen(false)}
+        isOpen={deleteModalOpen}
+        title="Delete Post"
+        body="Are you sure you want to delete your post?"
+      />
     </>
   );
 };

@@ -12,6 +12,7 @@ import { Comment } from "../../features/post/postSlice";
 import { AlertTypes } from "../../util/alertTypes";
 import CommentReply from "./CommentReply";
 import dateFormat from "dateformat";
+import DeleteModal from "../modals/DeleteModal";
 
 interface Props {
   comment: Comment;
@@ -32,6 +33,7 @@ const PostComment = (props: Props) => {
   const [replyText, setReplyText] = useState("");
   const [isEdit, setIsEdit] = useState(false);
   const [editText, setEditText] = useState(props.comment.body);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   const isOwner = isAuthenticated && user?._id === props.comment.user._id;
 
@@ -101,6 +103,7 @@ const PostComment = (props: Props) => {
 
   const onDeleteClicked = () => {
     dispatch(deleteComment(postId!, props.comment._id));
+    setDeleteModalOpen(false);
     navigate(`/planets/${planet}/discussion/${postId}`);
   };
 
@@ -125,7 +128,6 @@ const PostComment = (props: Props) => {
               <p className="hidden self-end text-sm opacity-70 md:block">
                 {dateString}
               </p>
-              {/* Delete button */}
               {isOwner && (
                 <div className="flex gap-4">
                   {!isEdit ? (
@@ -172,7 +174,11 @@ const PostComment = (props: Props) => {
                     </>
                   )}
 
-                  <div className="self-end" onClick={() => onDeleteClicked()}>
+                  {/* Delete button */}
+                  <div
+                    className="self-end"
+                    onClick={() => setDeleteModalOpen(true)}
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -244,6 +250,13 @@ const PostComment = (props: Props) => {
           return <CommentReply key={comment._id} reply={comment} />;
         })}
       </div>
+      <DeleteModal
+        onConfirm={() => onDeleteClicked()}
+        onCancel={() => setDeleteModalOpen(false)}
+        isOpen={deleteModalOpen}
+        title="Delete Comment"
+        body="Are you sure you want to delete your comment?"
+      />
     </>
   );
 };

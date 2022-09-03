@@ -7,6 +7,7 @@ import { AlertTypes } from "../../util/alertTypes";
 import dateFormat from "dateformat";
 import { useNavigate, useParams } from "react-router-dom";
 import { deleteReply, updateReply } from "../../features/post/postActions";
+import DeleteModal from "../modals/DeleteModal";
 
 interface Props {
   reply: ChildComment;
@@ -20,6 +21,7 @@ const CommentReply = (props: Props) => {
 
   const [isEdit, setIsEdit] = useState(false);
   const [editText, setEditText] = useState(props.reply.body);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   const isOwner = isAuthenticated && user?._id === props.reply.user._id;
 
@@ -55,6 +57,7 @@ const CommentReply = (props: Props) => {
 
   const deleteHandler = () => {
     dispatch(deleteReply(postId!, props.reply._id));
+    setDeleteModalOpen(false);
   };
 
   const favPlanet = planets[props.reply.user.favPlanet - 1];
@@ -76,7 +79,6 @@ const CommentReply = (props: Props) => {
               <p className="hidden self-end text-sm opacity-80 md:block">
                 {dateString}
               </p>
-              {/* Delete button */}
               {isOwner && (
                 <div className="flex gap-4">
                   {!isEdit ? (
@@ -123,7 +125,11 @@ const CommentReply = (props: Props) => {
                     </>
                   )}
 
-                  <div className="self-end" onClick={() => deleteHandler()}>
+                  {/* Delete button */}
+                  <div
+                    className="self-end"
+                    onClick={() => setDeleteModalOpen(true)}
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -179,6 +185,15 @@ const CommentReply = (props: Props) => {
             </div>
           </div>
         )}
+      </div>
+      <div>
+        <DeleteModal
+          onConfirm={() => deleteHandler()}
+          onCancel={() => setDeleteModalOpen(false)}
+          isOpen={deleteModalOpen}
+          title="Delete Comment"
+          body="Are you sure you want to delete your comment?"
+        />
       </div>
     </>
   );
