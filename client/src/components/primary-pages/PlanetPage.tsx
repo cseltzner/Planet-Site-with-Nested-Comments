@@ -44,16 +44,16 @@ const PlanetPage = () => {
           <p className="mt-8 text-xl font-light leading-7 opacity-70">
             {summary}
           </p>
-          <button className="mt-4 inline-block w-full bg-secondary-orange py-3 text-2xl hover:opacity-95 lg:mt-12">
-            <Link to={`/planets/${planet}/discussion`} className="block">
+          <button className="mt-4 inline-block w-full bg-secondary-orange text-2xl hover:opacity-95 lg:mt-12">
+            <Link to={`/planets/${planet}/discussion`} className="block py-3">
               Discussion
             </Link>
           </button>
-          <button className="mt-6 inline-block w-full border border-white border-opacity-50 bg-transparent py-3 text-2xl transition-opacity hover:border-opacity-70">
+          <button className="mt-6 inline-block w-full border border-white border-opacity-50 bg-transparent text-2xl transition-opacity hover:border-opacity-70">
             <a
               href={`https://en.wikipedia.org/wiki/${name}_(planet)`}
               target="_blank"
-              className="block"
+              className="block py-3"
             >
               More Information
             </a>
