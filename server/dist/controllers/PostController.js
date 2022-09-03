@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deletePost = exports.editPost = exports.getPost = exports.getAllPosts = exports.createPost = void 0;
+exports.unlikePost = exports.likePost = exports.deletePost = exports.editPost = exports.getPost = exports.getAllPosts = exports.createPost = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const Post_1 = require("../models/Post");
 const postPopulate_1 = require("./postPopulate");
@@ -214,3 +214,83 @@ const deletePost = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.deletePost = deletePost;
+// Like a post
+const likePost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _d, _e, _f;
+    try {
+        const userId = (_d = req.userId) === null || _d === void 0 ? void 0 : _d.id;
+        const postId = req.params.postId;
+        if (postId.length !== 24) {
+            return res
+                .status(http_status_codes_1.StatusCodes.BAD_REQUEST)
+                .json({ msg: "Invalid Post Id" });
+        }
+        const post = yield Post_1.Post.findById(postId);
+        // Check if the post exists
+        if (!post) {
+            return res
+                .status(http_status_codes_1.StatusCodes.BAD_REQUEST)
+                .json({ msg: "Invalid post Id" });
+        }
+        // Check if post has already been liked by this user
+        if (post.likes &&
+            ((_e = post.likes) === null || _e === void 0 ? void 0 : _e.filter((like) => like.user.toString() === userId).length) > 0) {
+            return res
+                .status(http_status_codes_1.StatusCodes.BAD_REQUEST)
+                .json({ msg: "Post already liked" });
+        }
+        (_f = post.likes) === null || _f === void 0 ? void 0 : _f.push({ user: userId });
+        yield post.save();
+        return res.json(post.likes);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).send("Server Error");
+        return;
+    }
+});
+exports.likePost = likePost;
+// Unlike a post
+const unlikePost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _g, _h, _j;
+    try {
+        const userId = (_g = req.userId) === null || _g === void 0 ? void 0 : _g.id;
+        const postId = req.params.postId;
+        if (postId.length !== 24) {
+            return res
+                .status(http_status_codes_1.StatusCodes.BAD_REQUEST)
+                .json({ msg: "Invalid Post Id" });
+        }
+        const post = yield Post_1.Post.findById(postId);
+        // Check if the post exists
+        if (!post) {
+            return res
+                .status(http_status_codes_1.StatusCodes.BAD_REQUEST)
+                .json({ msg: "Invalid post Id" });
+        }
+        // Check if post has already been liked by this user
+        if (post.likes &&
+            ((_h = post.likes) === null || _h === void 0 ? void 0 : _h.filter((like) => like.user.toString() === userId).length) === 0) {
+            return res
+                .status(http_status_codes_1.StatusCodes.BAD_REQUEST)
+                .json({ msg: "Post has not been liked by this user" });
+        }
+        const newLikes = (_j = post.likes) === null || _j === void 0 ? void 0 : _j.filter((like) => like.user.toString() !== userId);
+        post.likes = newLikes;
+        // // Get remove index
+        // const removeIndex = post.likes
+        //   ?.map((like) => like.user.toString())
+        //   .indexOf(userId);
+        // if (removeIndex) {
+        //   post.likes?.splice(removeIndex, 1);
+        // }
+        yield post.save();
+        return res.json(post.likes);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).send("Server Error");
+        return;
+    }
+});
+exports.unlikePost = unlikePost;

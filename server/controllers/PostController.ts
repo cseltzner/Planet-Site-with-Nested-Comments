@@ -217,3 +217,96 @@ export const deletePost = async (
     return;
   }
 };
+
+// Like a post
+export const likePost = async (req: express.Request, res: express.Response) => {
+  try {
+    const userId = req.userId?.id;
+    const postId = req.params.postId;
+
+    if (postId.length !== 24) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ msg: "Invalid Post Id" });
+    }
+
+    const post = await Post.findById(postId);
+
+    // Check if the post exists
+    if (!post) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ msg: "Invalid post Id" });
+    }
+
+    // Check if post has already been liked by this user
+    if (
+      post.likes &&
+      post.likes?.filter((like) => like.user.toString() === userId).length > 0
+    ) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ msg: "Post already liked" });
+    }
+
+    post.likes?.push({ user: userId });
+
+    await post.save();
+
+    return res.json(post.likes);
+  } catch (err) {
+    console.log(err);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Server Error");
+    return;
+  }
+};
+
+// Unlike a post
+export const unlikePost = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const userId = req.userId?.id;
+    const postId = req.params.postId;
+
+    if (postId.length !== 24) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ msg: "Invalid Post Id" });
+    }
+
+    const post = await Post.findById(postId);
+
+    // Check if the post exists
+    if (!post) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ msg: "Invalid post Id" });
+    }
+
+    // Check if post has already been liked by this user
+    if (
+      post.likes &&
+      post.likes?.filter((like) => like.user.toString() === userId).length === 0
+    ) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ msg: "Post has not been liked by this user" });
+    }
+
+    const newLikes = post.likes?.filter(
+      (like) => like.user.toString() !== userId
+    );
+
+    post.likes = newLikes;
+
+    await post.save();
+
+    return res.json(post.likes);
+  } catch (err) {
+    console.log(err);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Server Error");
+    return;
+  }
+};

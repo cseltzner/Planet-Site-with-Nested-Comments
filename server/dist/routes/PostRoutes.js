@@ -76,4 +76,16 @@ router.put("/:postId", [
 router.delete("/:postId", auth_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, postController_1.deletePost)(req, res);
 }));
+// @route   PUT api/posts/like/:postId
+// @desc    Like a post
+// @access  Private
+router.put("/like/:postId", auth_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield (0, postController_1.likePost)(req, res);
+}));
+// @route   PUT api/posts/unlike/:postId
+// @desc    Unlike a post
+// @access  Private
+router.put("/unlike/:postId", auth_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    yield (0, postController_1.unlikePost)(req, res);
+}));
 exports.default = router;

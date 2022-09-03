@@ -7,6 +7,8 @@ import {
   editPost,
   getAllPosts,
   getPost,
+  likePost,
+  unlikePost,
 } from "../controllers/postController";
 import { authMiddleware } from "../middleware/auth";
 const router = Router();
@@ -92,6 +94,30 @@ router.delete(
 
   async (req: express.Request, res: express.Response) => {
     await deletePost(req, res);
+  }
+);
+
+// @route   PUT api/posts/like/:postId
+// @desc    Like a post
+// @access  Private
+router.put(
+  "/like/:postId",
+  authMiddleware,
+
+  async (req: express.Request, res: express.Response) => {
+    await likePost(req, res);
+  }
+);
+
+// @route   PUT api/posts/unlike/:postId
+// @desc    Unlike a post
+// @access  Private
+router.put(
+  "/unlike/:postId",
+  authMiddleware,
+
+  async (req: express.Request, res: express.Response) => {
+    await unlikePost(req, res);
   }
 );
 
