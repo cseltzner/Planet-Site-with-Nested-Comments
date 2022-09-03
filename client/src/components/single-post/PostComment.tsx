@@ -113,7 +113,7 @@ const PostComment = (props: Props) => {
   return (
     <>
       <div className="mt-3">
-        <div className="flex flex-row items-center gap-8 border-[3px]  border-secondary-orange bg-black p-3">
+        <div className="flex flex-row items-center gap-8 border-[3px]  border-secondary-orange bg-black p-3 lg:p-6">
           <div className="flex flex-col items-center self-start">
             <h4 className="font-light tracking-wide opacity-80">
               {props.comment.user.username}

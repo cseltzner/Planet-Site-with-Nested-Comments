@@ -64,7 +64,7 @@ const CommentReply = (props: Props) => {
   return (
     <>
       <div className="mt-3 ml-6">
-        <div className="flex flex-row gap-8 rounded-tl-lg border-l-[3px]  border-secondary-orange bg-black bg-opacity-70 p-3">
+        <div className="flex flex-row gap-8 rounded-tl-lg border-l-[3px]  border-secondary-orange bg-black bg-opacity-70 p-3 lg:p-6">
           <div className="flex flex-col items-center ">
             <h4 className="font-light tracking-wide opacity-80">
               {props.reply.user.username}
