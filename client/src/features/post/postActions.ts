@@ -201,6 +201,42 @@ export const deleteComment =
     }
   };
 
+// Update comment
+export const updateComment =
+  (postId: string, commentId: string, body: string) =>
+  async (dispatch: Dispatch<any>) => {
+    try {
+      const data = {
+        body: body,
+      };
+      dispatch(postActions.setLoading());
+      const res = await axios.put(
+        `/api/posts/comments/${postId}/${commentId}`,
+        data,
+        defaultHeaders
+      );
+      dispatch(postActions.updateComment());
+      dispatch(setAlert("Comment updated", AlertTypes.SUCCESS));
+      dispatch(getPost(postId));
+    } catch (error) {
+      const err = error as AxiosError;
+
+      dispatch(
+        setAlert(
+          "Failed to delete comment. Reason: " + err.response!.statusText,
+          AlertTypes.DANGER
+        )
+      );
+
+      dispatch(
+        postActions.postError({
+          msg: err.response!.statusText,
+          status: err.response!.status,
+        })
+      );
+    }
+  };
+
 // Reply to comment
 export const addReply =
   (postId: string, commentId: string, body: string) =>

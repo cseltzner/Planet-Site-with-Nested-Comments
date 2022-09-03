@@ -99,6 +99,9 @@ const postSlice = createSlice({
     deleteComment: (state) => {
       state.loading = false;
     },
+    updateComment: (state) => {
+      state.loading = false;
+    },
     addReply: (state, action) => {
       if (state.post !== null) {
         const parentComment = state.post.comments.find(
