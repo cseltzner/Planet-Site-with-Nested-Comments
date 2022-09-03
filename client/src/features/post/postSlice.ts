@@ -116,6 +116,9 @@ const postSlice = createSlice({
       }
       state.loading = false;
     },
+    updateReply: (state) => {
+      state.loading = false;
+    },
   },
 });
 
