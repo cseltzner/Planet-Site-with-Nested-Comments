@@ -97,6 +97,9 @@ const postSlice = createSlice({
       state.post = action.payload;
       state.loading = false;
     },
+    resetPost: (state) => {
+      state.post = null;
+    },
     addComment: (state, action) => {
       state.post = action.payload;
       state.loading = false;

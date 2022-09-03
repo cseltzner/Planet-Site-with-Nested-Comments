@@ -370,3 +370,8 @@ export const removeLike =
       );
     }
   };
+
+// Reset post
+export const resetPost = () => async (dispatch: Dispatch<any>) => {
+  dispatch(postActions.resetPost);
+};
