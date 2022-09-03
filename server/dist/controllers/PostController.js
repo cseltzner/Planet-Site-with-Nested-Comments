@@ -277,13 +277,6 @@ const unlikePost = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         }
         const newLikes = (_j = post.likes) === null || _j === void 0 ? void 0 : _j.filter((like) => like.user.toString() !== userId);
         post.likes = newLikes;
-        // // Get remove index
-        // const removeIndex = post.likes
-        //   ?.map((like) => like.user.toString())
-        //   .indexOf(userId);
-        // if (removeIndex) {
-        //   post.likes?.splice(removeIndex, 1);
-        // }
         yield post.save();
         return res.json(post.likes);
     }

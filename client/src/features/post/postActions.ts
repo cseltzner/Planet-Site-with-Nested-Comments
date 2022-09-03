@@ -335,3 +335,38 @@ export const updateReply =
       );
     }
   };
+
+// Add like
+export const addLike = (postId: string) => async (dispatch: Dispatch<any>) => {
+  try {
+    const res = await axios.put(`/api/posts/like/${postId}`);
+    dispatch(postActions.updateLikes({ id: postId, likes: res.data }));
+  } catch (error) {
+    const err = error as AxiosError;
+
+    dispatch(
+      postActions.postError({
+        msg: err.response!.statusText,
+        status: err.response!.status,
+      })
+    );
+  }
+};
+
+// Remove like
+export const removeLike =
+  (postId: string) => async (dispatch: Dispatch<any>) => {
+    try {
+      const res = await axios.put(`/api/posts/unlike/${postId}`);
+      dispatch(postActions.updateLikes({ id: postId, likes: res.data }));
+    } catch (error) {
+      const err = error as AxiosError;
+
+      dispatch(
+        postActions.postError({
+          msg: err.response!.statusText,
+          status: err.response!.status,
+        })
+      );
+    }
+  };

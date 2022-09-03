@@ -12,6 +12,10 @@ export interface Post {
   createdAt: string;
   updatedAt: string;
   comments: Comment[];
+  likes: {
+    _id: string;
+    user: string;
+  }[];
 }
 
 export interface Comment {
@@ -71,14 +75,6 @@ const postSlice = createSlice({
       state.error = action.payload;
       state.loading = false;
     },
-    updateLikes: (state, action) => {
-      state.posts = state.posts.map((post) =>
-        post._id === action.payload.postId
-          ? { ...post, likes: action.payload.likes }
-          : post
-      );
-      state.loading = false;
-    },
     deletePost: (state, action) => {
       state.loading = false;
     },
@@ -86,6 +82,15 @@ const postSlice = createSlice({
       state.posts = [action.payload, ...state.posts];
     },
     updatePost: (state) => {
+      state.loading = false;
+    },
+    updateLikes: (state, action) => {
+      state.posts = state.posts.map((post) =>
+        post._id === action.payload.id
+          ? { ...post, likes: action.payload.likes }
+          : post
+      );
+      state.post = { ...state.post!, likes: action.payload.likes };
       state.loading = false;
     },
     getPost: (state, action) => {
