@@ -292,10 +292,9 @@ const Post = () => {
           <PostComments comments={post!.comments} />
         )}
         {/* No comments template */}
-        {!loading &&
-          post?.comments &&
-          post?.comments.length < 1 &&
-          "No comments yet..."}
+        {!loading && post?.comments && post?.comments.length < 1 && (
+          <p className="text-lg opacity-90">No comments yet...</p>
+        )}
       </div>
       <DeleteModal
         onConfirm={() => onDeleteClicked()}
