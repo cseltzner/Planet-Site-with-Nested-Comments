@@ -20,7 +20,14 @@ const PostListItem = (props: Props) => {
   const numLikes = post.likes.length;
   const isLiked = post.likes.find((like) => like.user === userId);
 
-  const commentTotal = post.comments.flat().length;
+  // Total number of comments
+  const commentLength = post.comments.length;
+  let replyLength = 0;
+  post.comments.forEach((comment) => {
+    replyLength += comment.childComments.length;
+  });
+  const commentTotal = commentLength + replyLength;
+  //
 
   const urlToPost = `/planets/${planet}/discussion/${post._id}`;
 
