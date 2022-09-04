@@ -52,8 +52,9 @@ const Register = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate("/");
+      return navigate("/");
     }
+    document.title = "Register | PlanetFacts";
   }, [isAuthenticated]);
 
   return (

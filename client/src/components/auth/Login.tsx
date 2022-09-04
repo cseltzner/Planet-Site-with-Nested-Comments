@@ -27,6 +27,7 @@ const Login = () => {
     if (isAuthenticated) {
       return navigate("/");
     }
+    document.title = "Sign in | PlanetFacts";
   }, [isAuthenticated]);
 
   return (

@@ -23,6 +23,7 @@ const PlanetPage = () => {
       navigate("/");
     } else {
       setPlanetsObj(planetData[`${planet?.toLowerCase()}`]);
+      document.title = `${planet} | PlanetFacts` || "PlanetFacts";
     }
   }, [planet]);
 

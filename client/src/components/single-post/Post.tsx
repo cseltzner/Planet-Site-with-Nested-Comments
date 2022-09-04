@@ -50,6 +50,15 @@ const Post = () => {
     }
   }, []);
 
+  // Set document title
+  useEffect(() => {
+    if (!loading && post) {
+      document.title = `${post.title} | PlanetFacts`;
+    } else {
+      document.title = "PlanetFacts";
+    }
+  }, [post, loading]);
+
   const postTextChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setPostText(e.target.value);
   };

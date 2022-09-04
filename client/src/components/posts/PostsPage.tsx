@@ -10,11 +10,13 @@ const PostsPage = () => {
   const { planet } = useParams();
   const planetId = planets.indexOf(planet!) + 1;
 
-  // If link is invalid
+  // If link is invalid, navigate away
   useEffect(() => {
     if (!planets.includes(planet!)) {
       navigate("/");
+      return;
     }
+    document.title = `Discussion | ${planet}`;
   }, [planet]);
 
   return (
