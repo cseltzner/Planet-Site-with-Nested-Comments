@@ -123,7 +123,7 @@ const PostComment = (props: Props) => {
             </div>
           </div>
           <div className="flex w-full flex-col justify-between gap-2 text-lg">
-            <p className="text-xl">{props.comment.body}</p>
+            <p className="sm:text-lg">{props.comment.body}</p>
             <div className="mt-2 mr-4 flex justify-end gap-16">
               <p className="hidden self-end text-sm opacity-70 md:block">
                 {dateString}

@@ -73,7 +73,7 @@ const CommentReply = (props: Props) => {
               <img src={`/img/planets/${favPlanet}.svg`} alt={favPlanet} />
             </div>
           </div>
-          <div className="mt-2 flex w-full flex-col justify-between gap-2 text-lg">
+          <div className="mt-2 flex w-full flex-col justify-between gap-2 sm:text-lg">
             <p>{props.reply.body}</p>
             <div className="mt-2 mr-4 flex items-center justify-end gap-16">
               <p className="hidden self-end text-sm opacity-80 md:block">
