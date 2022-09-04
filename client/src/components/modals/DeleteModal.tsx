@@ -9,7 +9,6 @@ interface Props {
 }
 
 const DeleteModal = (props: Props) => {
-  console.log("delete modal rendered");
   return (
     <>
       {/* Modal backdrop */}
