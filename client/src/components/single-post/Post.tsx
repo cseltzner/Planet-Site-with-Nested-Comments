@@ -134,7 +134,7 @@ const Post = () => {
   const dateString = post && dateFormat(date, "m/d/yy 'at' h:MMtt");
   return (
     <>
-      <div className="flex flex-col p-4 text-white sm:p-12 lg:px-24">
+      <div className="flex flex-col p-4 text-white sm:p-12 lg:px-36 xl:px-72">
         <div className="flex flex-col items-center gap-8 md:flex-row md:gap-24">
           <div className="flex flex-col items-center self-start">
             <h1 className="text-2xl underline opacity-90 md:text-7xl md:no-underline lg:text-8xl">
