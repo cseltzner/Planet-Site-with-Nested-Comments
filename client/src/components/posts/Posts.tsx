@@ -60,7 +60,7 @@ const Posts = (props: Props) => {
       )}
       {!loading && (
         <div className="grow">
-          {posts.length > 0 ? (
+          {posts && posts.constructor === Array && posts.length > 0 ? (
             posts.map((post) => <PostListItem key={post._id} post={post} />)
           ) : (
             <>

@@ -22,7 +22,7 @@ function App() {
       {/* Background image */}
       <div
         className="min-w-screen min-h-screen bg-primary-purple"
-        style={{ backgroundImage: "url(./img/Starry-night.svg)" }}
+        style={{ backgroundImage: "url(/img/Starry-night.svg)" }}
       >
         <Navbar />
         <Alert alerts={alerts} />
