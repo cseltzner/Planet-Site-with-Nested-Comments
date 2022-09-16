@@ -1,5 +1,11 @@
 # PlanetFacts
 
+## Site
+
+View the site here: [PlanetFacts](http://143.110.236.194:3000)
+
+## Description
+
 PlanetFacts is a site for sharing your favorite facts about your favorite planets! The site shares a small overview of the planet, but what is most exciting is that users can register and post their own planet facts, like other user's facts, and comment on their posts, similar to a site like Reddit.
 
 ## Purpose
