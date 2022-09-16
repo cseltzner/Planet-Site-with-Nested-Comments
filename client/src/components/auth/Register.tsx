@@ -39,6 +39,7 @@ const Register = () => {
       });
     } catch (err) {
       dispatch(setAlert((err as Error).message, AlertTypes.DANGER));
+      return;
     }
 
     const registerArgs = {
