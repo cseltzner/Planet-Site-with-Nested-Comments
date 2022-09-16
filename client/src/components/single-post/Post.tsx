@@ -33,7 +33,7 @@ const Post = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
-  const isOwner = isAuthenticated && user?._id === post?.user._id;
+  const isOwner = isAuthenticated && user?._id === post?.user?._id;
 
   useEffect(() => {
     dispatch(getPost(postId!));
