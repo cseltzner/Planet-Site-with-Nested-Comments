@@ -2,7 +2,7 @@
 
 ## Site
 
-View the site here: [PlanetFacts](http://143.110.236.194:3000)
+View the site here: [PlanetFacts](http://seltzport.com:3000)
 
 ## Description
 
